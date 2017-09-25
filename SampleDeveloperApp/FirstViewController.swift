@@ -9,6 +9,9 @@
 import UIKit
 
 class FirstViewController: UIViewController {
+    
+    private let db = CKContainer.default().publicCloudDatabase
+    private let container = CKContainer.default()
 
     override func viewDidLoad() {
         super.viewDidLoad()
