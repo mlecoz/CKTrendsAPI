@@ -15,6 +15,7 @@
 		E14CB1DC1F77577C00F8C23F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E14CB1DA1F77577C00F8C23F /* LaunchScreen.storyboard */; };
 		E14CB1E71F77577C00F8C23F /* SampleDeveloperAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14CB1E61F77577C00F8C23F /* SampleDeveloperAppTests.swift */; };
 		E14CB1F21F77577C00F8C23F /* SampleDeveloperAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14CB1F11F77577C00F8C23F /* SampleDeveloperAppUITests.swift */; };
+		E14CB2021F77591700F8C23F /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E14CB2011F77591700F8C23F /* CloudKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,8 @@
 		E14CB1ED1F77577C00F8C23F /* SampleDeveloperAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SampleDeveloperAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E14CB1F11F77577C00F8C23F /* SampleDeveloperAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleDeveloperAppUITests.swift; sourceTree = "<group>"; };
 		E14CB1F31F77577C00F8C23F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E14CB1FF1F77591300F8C23F /* SampleDeveloperApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SampleDeveloperApp.entitlements; sourceTree = "<group>"; };
+		E14CB2011F77591700F8C23F /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E14CB2021F77591700F8C23F /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +87,7 @@
 				E14CB1E51F77577C00F8C23F /* SampleDeveloperAppTests */,
 				E14CB1F01F77577C00F8C23F /* SampleDeveloperAppUITests */,
 				E14CB1CD1F77577C00F8C23F /* Products */,
+				E14CB2001F77591700F8C23F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -99,6 +104,7 @@
 		E14CB1CE1F77577C00F8C23F /* SampleDeveloperApp */ = {
 			isa = PBXGroup;
 			children = (
+				E14CB1FF1F77591300F8C23F /* SampleDeveloperApp.entitlements */,
 				E14CB1CF1F77577C00F8C23F /* AppDelegate.swift */,
 				E14CB1D11F77577C00F8C23F /* FirstViewController.swift */,
 				E14CB1D31F77577C00F8C23F /* SecondViewController.swift */,
@@ -126,6 +132,14 @@
 				E14CB1F31F77577C00F8C23F /* Info.plist */,
 			);
 			path = SampleDeveloperAppUITests;
+			sourceTree = "<group>";
+		};
+		E14CB2001F77591700F8C23F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E14CB2011F77591700F8C23F /* CloudKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,8 +210,16 @@
 				TargetAttributes = {
 					E14CB1CB1F77577C00F8C23F = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = MC7DPLRVV7;
+						DevelopmentTeam = 5422L7PASY;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 					E14CB1E11F77577C00F8C23F = {
 						CreatedOnToolsVersion = 8.3.3;
@@ -419,11 +441,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = MC7DPLRVV7;
+				CODE_SIGN_ENTITLEMENTS = SampleDeveloperApp/SampleDeveloperApp.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 5422L7PASY;
 				INFOPLIST_FILE = SampleDeveloperApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.MarissaLeCoz.SampleDeveloperApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MarissaLeCozz.SampleDeveloperApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -432,11 +458,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = MC7DPLRVV7;
+				CODE_SIGN_ENTITLEMENTS = SampleDeveloperApp/SampleDeveloperApp.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 5422L7PASY;
 				INFOPLIST_FILE = SampleDeveloperApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.MarissaLeCoz.SampleDeveloperApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MarissaLeCozz.SampleDeveloperApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
