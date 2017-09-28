@@ -30,9 +30,9 @@ class SecondViewController: UIViewController {
         let record = CKRecord(recordType: "RecordTypeB")
         db.save(record) { savedRecord, error in
             if (error == nil) {
-                let randRed = CGFloat(Float(arc4random()) / Float(UINT32_MAX))
-                let randGreen = CGFloat(Float(arc4random()) / Float(UINT32_MAX))
-                let randBlue = CGFloat(Float(arc4random()) / Float(UINT32_MAX))
+                let randRed = CGFloat(drand48())
+                let randGreen = CGFloat(drand48())
+                let randBlue = CGFloat(drand48())
                 self.successMessage.textColor = UIColor(red: randRed, green: randGreen, blue: randBlue, alpha: 1.0)
                 self.successMessage.isHidden = false
             }
