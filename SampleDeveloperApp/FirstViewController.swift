@@ -11,6 +11,8 @@ import CloudKit
 
 class FirstViewController: UIViewController {
     
+    @IBOutlet weak var successMessage: UILabel!
+
     let db = CKContainer(identifier: "iCloud.com.MarissaLeCozz.SampleDeveloperApp").publicCloudDatabase;
     
 
@@ -27,7 +29,17 @@ class FirstViewController: UIViewController {
     @IBAction func createRecordAInstance(_ sender: UIButton) {
         let record = CKRecord(recordType: "RecordTypeA")
         db.save(record) { savedRecord, error in
-            print("Error saving to record to CloudKit!");
+            if (error == nil) {
+                let randRed = CGFloat(Float(arc4random()) / Float(UINT32_MAX))
+                let randGreen = CGFloat(Float(arc4random()) / Float(UINT32_MAX))
+                let randBlue = CGFloat(Float(arc4random()) / Float(UINT32_MAX))
+                self.successMessage.textColor = UIColor(red: randRed, green: randGreen, blue: randBlue, alpha: 1.0)
+                self.successMessage.isHidden = false
+            }
+            else {
+                print("Error saving to record to CloudKit!")
+                self.successMessage.isHidden = true
+            }
         }
     }
     

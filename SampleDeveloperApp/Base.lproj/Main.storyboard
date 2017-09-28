@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -35,14 +36,29 @@
                                     <action selector="createRecordAInstance:" destination="9pv-A4-QxB" eventType="touchUpInside" id="Tz1-8o-VGt"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Record created and saved to CloudKit successfully!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6CJ-Kf-XAe">
+                                <rect key="frame" x="16" y="366.5" width="343" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="DOy-Mf-ceA"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="3Ne-xr-9xX" firstAttribute="centerY" secondItem="tsR-hK-woN" secondAttribute="centerY" id="0SP-P3-2AO"/>
                             <constraint firstItem="3Ne-xr-9xX" firstAttribute="centerX" secondItem="tsR-hK-woN" secondAttribute="centerX" id="agX-g4-CLe"/>
+                            <constraint firstItem="6CJ-Kf-XAe" firstAttribute="top" secondItem="3Ne-xr-9xX" secondAttribute="bottom" constant="8" symbolic="YES" id="mLN-2D-ajT"/>
+                            <constraint firstItem="6CJ-Kf-XAe" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" id="syf-AF-ChX"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="6CJ-Kf-XAe" secondAttribute="trailing" id="zPR-s5-DWr"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="First" image="first" id="acW-dT-cKf"/>
+                    <connections>
+                        <outlet property="successMessage" destination="6CJ-Kf-XAe" id="TWl-Ic-0sv"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
             </objects>
@@ -75,14 +91,29 @@
                                     <action selector="createRecordBInstance:" destination="8rJ-Kc-sve" eventType="touchUpInside" id="gPe-QS-G86"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Record created and saved to CloudKit successfully!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LM7-Yq-mvA">
+                                <rect key="frame" x="16" y="366.5" width="343" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="mAT-iF-0Fa"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="LM7-Yq-mvA" firstAttribute="top" secondItem="8u5-EJ-Td0" secondAttribute="bottom" constant="8" symbolic="YES" id="8l7-Ey-bbP"/>
                             <constraint firstItem="8u5-EJ-Td0" firstAttribute="centerX" secondItem="QS5-Rx-YEW" secondAttribute="centerX" id="Riz-Ot-aPC"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="LM7-Yq-mvA" secondAttribute="leading" id="ldk-ap-0xi"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="LM7-Yq-mvA" secondAttribute="trailing" id="qzv-HS-nJJ"/>
                             <constraint firstItem="8u5-EJ-Td0" firstAttribute="centerY" secondItem="QS5-Rx-YEW" secondAttribute="centerY" id="x3x-26-2zD"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Second" image="second" id="cPa-gy-q4n"/>
+                    <connections>
+                        <outlet property="successMessage" destination="LM7-Yq-mvA" id="p3V-oj-t4T"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
             </objects>

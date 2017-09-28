@@ -11,11 +11,14 @@ import CloudKit
 
 class SecondViewController: UIViewController {
     
+    @IBOutlet weak var successMessage: UILabel!
+    
     let db = CKContainer(identifier: "iCloud.com.MarissaLeCozz.SampleDeveloperApp").publicCloudDatabase;
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        successMessage.isHidden = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -26,7 +29,17 @@ class SecondViewController: UIViewController {
     @IBAction func createRecordBInstance(_ sender: UIButton) {
         let record = CKRecord(recordType: "RecordTypeB")
         db.save(record) { savedRecord, error in
-            print("Error saving to record to CloudKit!");
+            if (error == nil) {
+                let randRed = CGFloat(Float(arc4random()) / Float(UINT32_MAX))
+                let randGreen = CGFloat(Float(arc4random()) / Float(UINT32_MAX))
+                let randBlue = CGFloat(Float(arc4random()) / Float(UINT32_MAX))
+                self.successMessage.textColor = UIColor(red: randRed, green: randGreen, blue: randBlue, alpha: 1.0)
+                self.successMessage.isHidden = false
+            }
+            else {
+                print("Error saving to record to CloudKit!")
+                self.successMessage.isHidden = true
+            }
         }
     }
 
