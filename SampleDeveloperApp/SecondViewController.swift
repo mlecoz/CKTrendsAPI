@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import CloudKit
 
 class SecondViewController: UIViewController {
+    
+    let db = CKContainer(identifier: "iCloud.com.MarissaLeCozz.SampleDeveloperApp").publicCloudDatabase;
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +23,12 @@ class SecondViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func createRecordBInstance(_ sender: UIButton) {
+        let record = CKRecord(recordType: "RecordTypeB")
+        db.save(record) { savedRecord, error in
+            print("Error saving to record to CloudKit!");
+        }
+    }
 
 }
 

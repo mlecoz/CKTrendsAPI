@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import CloudKit
 
 class FirstViewController: UIViewController {
     
-    private let db = CKContainer.default().publicCloudDatabase
-    private let container = CKContainer.default()
+    let db = CKContainer(identifier: "iCloud.com.MarissaLeCozz.SampleDeveloperApp").publicCloudDatabase;
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +24,13 @@ class FirstViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func createRecordAInstance(_ sender: UIButton) {
+        let record = CKRecord(recordType: "RecordTypeA")
+        db.save(record) { savedRecord, error in
+            print("Error saving to record to CloudKit!");
+        }
+    }
+    
 
 }
 
