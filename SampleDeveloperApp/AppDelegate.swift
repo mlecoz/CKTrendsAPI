@@ -7,15 +7,35 @@
 //
 
 import UIKit
+import CloudKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    
+    let db = CKContainer(identifier: "iCloud.com.MarissaLeCozz.SampleDeveloperApp").publicCloudDatabase;
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        let predicate = NSPredicate(value: true)
+        let subscription = CKQuerySubscription(recordType: "RecordTypeA", predicate: predicate, options: .firesOnRecordCreation)
+        
+        let info = CKNotificationInfo()
+        info.alertLocalizationKey = "NEW_RECORD_A_INSTANCE_ALERT"
+        info.soundName = nil
+        info.shouldBadge = false
+        
+        subscription.notificationInfo = info
+        
+        db.save(subscription) { subscription, error in
+            if (error != nil) {
+                print("Error saving subscription")
+            }
+        }
+        
         return true
     }
 
@@ -39,6 +59,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+    func application(didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        let ckNotification = CKNotification(fromRemoteNotificationDictionary: userInfo as! [String : NSObject])
+        if ckNotification.notificationType == .query, let queryNotification = ckNotification as? CKQueryNotification {
+            let recordID = queryNotification.recordID
+            
+            guard let rID = recordID else {
+                return
+            }
+            
+            // to show that this code was reached, change the string field in this record
+            let record = CKRecord(recordType: "RecordTypeA", recordID: rID)
+            record["aString"] = "The app received a notification that this record was created and, in turn, gave aString the value you are now reading." as CKRecordValue
+            
+            db.save(record) { record, error in
+                if (error != nil) {
+                    print("Error saving updating record")
+                }
+            }
+        }
     }
 
 
