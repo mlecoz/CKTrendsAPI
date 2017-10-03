@@ -213,6 +213,9 @@
 						DevelopmentTeam = 5422L7PASY;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};
@@ -548,6 +551,7 @@
 				E14CB1F81F77577C00F8C23F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E14CB1F91F77577C00F8C23F /* Build configuration list for PBXNativeTarget "SampleDeveloperAppTests" */ = {
 			isa = XCConfigurationList;
@@ -556,6 +560,7 @@
 				E14CB1FB1F77577C00F8C23F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E14CB1FC1F77577C00F8C23F /* Build configuration list for PBXNativeTarget "SampleDeveloperAppUITests" */ = {
 			isa = XCConfigurationList;
@@ -564,6 +569,7 @@
 				E14CB1FE1F77577C00F8C23F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

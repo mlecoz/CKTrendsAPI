@@ -8,17 +8,26 @@
 
 import UIKit
 import CloudKit
+import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
     
     let db = CKContainer(identifier: "iCloud.com.MarissaLeCozz.SampleDeveloperApp").publicCloudDatabase;
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        registerForRemoteNotification()
+        
+        // configures notif settings for alert message, sound, and badge
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().requestAuthorization(options: [[.alert, .sound, .badge]], completionHandler: { (granted, error) in
+                UIApplication.shared.registerForRemoteNotifications()
+            })
+        }
         
         let predicate = NSPredicate(value: true)
         let subscription = CKQuerySubscription(recordType: "RecordTypeA", predicate: predicate, options: .firesOnRecordCreation)
@@ -32,11 +41,71 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         db.save(subscription) { subscription, error in
             if (error != nil) {
-                print("Error saving subscription")
+                guard let error = error as? CKError else {
+                    return
+                }
+                if (error.errorCode == 15) {
+                    // do nothing; subscription already created; TODO - clean up this inefficiency?
+                }
+                else {
+                    print("Error saving subscription")
+                }
             }
         }
         
         return true
+    }
+    
+    func registerForRemoteNotification() {
+        if #available(iOS 10.0, *) {
+            let center  = UNUserNotificationCenter.current()
+            center.delegate = self
+            center.requestAuthorization(options: [.sound, .alert, .badge]) { (granted, error) in
+                if error == nil{
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
+            }
+        }
+        else {
+            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil))
+            UIApplication.shared.registerForRemoteNotifications()
+        }
+    }
+    
+    //Called when a notification is delivered to a foreground app.
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        let ckNotification = CKNotification(fromRemoteNotificationDictionary: notification.request.content.userInfo as! [String : NSObject])
+        
+        //let ckNotification = CKNotification(fromRemoteNotificationDictionary: userInfo as! [String : NSObject])
+        if ckNotification.notificationType == .query, let queryNotification = ckNotification as? CKQueryNotification {
+            let recordID = queryNotification.recordID
+            
+            guard let rID = recordID else {
+                return
+            }
+            
+            
+//            // to show that this code was reached, change the string field in this record
+//            let record = CKRecord(recordType: "RecordTypeA", recordID: rID)
+//            record["aString"] = "The app received a notification that this record was created and, in turn, gave aString the value you are now reading." as CKRecordValue
+//            
+//            db.save(record) { record, error in
+//                if (error != nil) {
+//                    print("Error saving updating record")
+//                }
+//            }
+        
+        print("detected a change: record with id %d was created", rID)
+        
+        }
+    }
+    
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        //print("User Info = ",response.notification.request.content.userInfo)
+        completionHandler()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -69,7 +138,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             guard let rID = recordID else {
                 return
             }
-            
+
             // to show that this code was reached, change the string field in this record
             let record = CKRecord(recordType: "RecordTypeA", recordID: rID)
             record["aString"] = "The app received a notification that this record was created and, in turn, gave aString the value you are now reading." as CKRecordValue
