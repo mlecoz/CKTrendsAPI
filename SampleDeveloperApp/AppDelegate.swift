@@ -97,7 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //                }
 //            }
         
-        print("detected a change: record with id %d was created", rID)
+        print("detected a change: record with id \(rID) was created")
         
         }
     }
