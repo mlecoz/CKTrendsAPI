@@ -72,7 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
     }
     
-    //Called when a notification is delivered to a foreground app.
+    // Called when a notification is delivered to a foreground, background, or quit app.
     @available(iOS 10.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         
@@ -99,6 +99,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         print("detected a change: record with id \(rID) was created")
         
+        }
+        
+        let otherDB = CKContainer(identifier: "iCloud.com.MarissaLeCoz.AnalyticsApp").publicCloudDatabase;
+        
+        let recordTypeTrackerRecord = CKRecord(recordType: "RecordTypeTracker")
+        recordTypeTrackerRecord["appID"] = 1 as CKRecordValue
+        recordTypeTrackerRecord["type"] = "RecordTypeA" as CKRecordValue
+        recordTypeTrackerRecord["count"] = 1 as CKRecordValue
+        recordTypeTrackerRecord["date"] = Date() as CKRecordValue
+        
+        otherDB.save(recordTypeTrackerRecord) { record, err in
+            if (err != nil) {
+                print("problem saving record to other db")
+            }
         }
     }
     

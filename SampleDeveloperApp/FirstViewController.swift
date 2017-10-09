@@ -13,7 +13,7 @@ class FirstViewController: UIViewController {
     
     @IBOutlet weak var successMessage: UILabel!
 
-    let db = CKContainer(identifier: "iCloud.com.MarissaLeCozz.SampleDeveloperApp").publicCloudDatabase;
+    let db = CKContainer(identifier: "iCloud.com.MarissaLeCozz.SampleDeveloperApp").publicCloudDatabase
     
 
     override func viewDidLoad() {
