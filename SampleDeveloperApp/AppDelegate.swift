@@ -9,6 +9,8 @@
 import UIKit
 import CloudKit
 import UserNotifications
+import Firebase
+import FirebaseDatabase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -16,9 +18,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var window: UIWindow?
     
     let db = CKContainer(identifier: "iCloud.com.MarissaLeCozz.SampleDeveloperApp").publicCloudDatabase;
+    
+    var firebaseDBRef = Database.database().reference()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        FirebaseApp.configure()
         
         registerForRemoteNotification()
         
@@ -78,7 +84,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         let ckNotification = CKNotification(fromRemoteNotificationDictionary: notification.request.content.userInfo as! [String : NSObject])
         
-        //let ckNotification = CKNotification(fromRemoteNotificationDictionary: userInfo as! [String : NSObject])
         if ckNotification.notificationType == .query, let queryNotification = ckNotification as? CKQueryNotification {
             let recordID = queryNotification.recordID
             
@@ -86,37 +91,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 return
             }
             
-            
-//            // to show that this code was reached, change the string field in this record
-//            let record = CKRecord(recordType: "RecordTypeA", recordID: rID)
-//            record["aString"] = "The app received a notification that this record was created and, in turn, gave aString the value you are now reading." as CKRecordValue
-//            
-//            db.save(record) { record, error in
-//                if (error != nil) {
-//                    print("Error saving updating record")
-//                }
-//            }
-        
-            
             print("detected a change: record with id \(rID) was created")
+            
+            // send change to firebase
+            
+            
         
         }
-        
-        // THIS DOES NOT WORK
-        
-//        let otherDB = CKContainer(identifier: "iCloud.com.MarissaLeCoz.AnalyticsApp").publicCloudDatabase;
-//        
-//        let recordTypeTrackerRecord = CKRecord(recordType: "RecordTypeTracker")
-//        recordTypeTrackerRecord["appID"] = 1 as CKRecordValue
-//        recordTypeTrackerRecord["type"] = "RecordTypeA" as CKRecordValue
-//        recordTypeTrackerRecord["count"] = 1 as CKRecordValue
-//        recordTypeTrackerRecord["date"] = Date() as CKRecordValue
-//        
-//        otherDB.save(recordTypeTrackerRecord) { record, err in
-//            if (err != nil) {
-//                print("problem saving record to other db")
-//            }
-//        }
     }
     
     @available(iOS 10.0, *)
@@ -146,28 +127,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-    
-    func application(didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        let ckNotification = CKNotification(fromRemoteNotificationDictionary: userInfo as! [String : NSObject])
-        if ckNotification.notificationType == .query, let queryNotification = ckNotification as? CKQueryNotification {
-            let recordID = queryNotification.recordID
-            
-            guard let rID = recordID else {
-                return
-            }
-
-            // to show that this code was reached, change the string field in this record
-            let record = CKRecord(recordType: "RecordTypeA", recordID: rID)
-            record["aString"] = "The app received a notification that this record was created and, in turn, gave aString the value you are now reading." as CKRecordValue
-            
-            db.save(record) { record, error in
-                if (error != nil) {
-                    print("Error saving updating record")
-                }
-            }
-        }
-    }
-
 
 }
 
