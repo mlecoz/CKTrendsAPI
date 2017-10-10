@@ -17,14 +17,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     var window: UIWindow?
     
-    let db = CKContainer(identifier: "iCloud.com.MarissaLeCozz.SampleDeveloperApp").publicCloudDatabase;
+    let db = CKContainer(identifier: "iCloud.com.MarissaLeCozz.SampleDeveloperApp").publicCloudDatabase
     
-    var firebaseDBRef = Database.database().reference()
+    var firebaseDBRef: DatabaseReference?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
         FirebaseApp.configure()
+        firebaseDBRef = Database.database().reference()
         
         registerForRemoteNotification()
         
@@ -94,8 +95,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             print("detected a change: record with id \(rID) was created")
             
             // send change to firebase
+            guard let firebaseDBRef = self.firebaseDBRef else {
+                return
+            }
             
-            
+            let appID = 1
+            let date = 1234
+            let count = 1
+            let type = "RecordTypeA"
+            firebaseDBRef.child("RecordTypeTracker").setValue(["appID": appID, "date": date, "count": count, "type": type])
         
         }
     }
