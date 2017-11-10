@@ -92,18 +92,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 return
             }
             
-            print("detected a change: record with id \(rID) was created")
-            
-            // send change to firebase
-            guard let firebaseDBRef = self.firebaseDBRef else {
-                return
+            self.db.fetch(withRecordID: rID) { record, err in
+                if err == nil {
+                    
+                    // send change to firebase
+                    guard let firebaseDBRef = self.firebaseDBRef else {
+                        return
+                    }
+                    
+                    let appID = 70
+                    
+                    let date = Date()
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "MM-dd-yy"
+                    let formattedDate = formatter.string(from: date)
+                    
+                    guard let recordType = record?.recordType else {
+                        return
+                    }
+                    
+                    var currentCount: Int
+                    let path = "\(appID)/\(date)/\(recordType)"
+                    firebaseDBRef.child(path).observeSingleEvent(of: .value) { snapshot, error in
+                        if 
+                    }
+                    
+                    
+                    firebaseDBRef.child(appID).child(date).setValue([recordType: 0])
+                    
+                }
             }
             
-            let appID = 1
-            let date = 1234
-            let count = 1
-            let type = "RecordTypeA"
-            firebaseDBRef.child("RecordTypeTracker").setValue(["appID": appID, "date": date, "count": count, "type": type])
+
+            
+            
         
         }
     }
