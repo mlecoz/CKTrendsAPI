@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 UIApplication.shared.registerForRemoteNotifications()
             })
         }
-        
+    
         let predicate = NSPredicate(value: true)
         let subscription = CKQuerySubscription(recordType: "RecordTypeA", predicate: predicate, options: .firesOnRecordCreation)
         
@@ -60,6 +60,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             }
         }
         
+        // ADD RECORD TYPES TO TRACKING LIST
+        let appID = 70
+        
+        guard let firebaseDBRef = self.firebaseDBRef else {
+            return true
+        }
+        
+        firebaseDBRef.child("\(appID)").child("TRACKING").setValue(["RecordTypeA": "true"])
+        
         return true
     }
     
@@ -82,6 +91,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     // Called when a notification is delivered to a foreground, background, or quit app.
     @available(iOS 10.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        // NOTE TO SELF: This is invoked by other instances of the sample app. The creator of an instance of a tracked record type
+        // does not receive a notification. So, create records from the simulator, and this method gets invoked by the version 
+        // running on my phone.
+        
+        // TODO only do this if you are the dev's user id so that this only happens once
         
         let ckNotification = CKNotification(fromRemoteNotificationDictionary: notification.request.content.userInfo as! [String : NSObject])
         
@@ -111,22 +126,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         return
                     }
                     
-                    var currentCount: Int
-                    let path = "\(appID)/\(date)/\(recordType)"
+                    let path = "\(appID)/\(formattedDate)"
                     firebaseDBRef.child(path).observeSingleEvent(of: .value) { snapshot, error in
-                        if 
+                        var newCount: Int
+                        let recordTypeToCountDict = snapshot.value as? [String:Any]? // record type : number
+                        if recordTypeToCountDict == nil || recordTypeToCountDict!?[recordType] == nil {
+                            newCount = 1
+                        }
+                        else {
+                            guard let oldCount = (recordTypeToCountDict!?[recordType] as? NSString)?.integerValue else {
+                                return
+                            }
+                            newCount = oldCount + 1
+                            
+                        }
+                        firebaseDBRef.child("\(appID)").child("\(formattedDate)").setValue([recordType: "\(newCount)"])
+
                     }
-                    
-                    
-                    firebaseDBRef.child(appID).child(date).setValue([recordType: 0])
                     
                 }
             }
-            
 
-            
-            
-        
         }
     }
     
