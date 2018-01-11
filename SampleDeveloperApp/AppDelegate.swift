@@ -31,8 +31,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         // configures notif settings for alert message, sound, and badge
         if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().requestAuthorization(options: [[.alert, .sound, .badge]], completionHandler: { (granted, error) in
-                UIApplication.shared.registerForRemoteNotifications()
+            DispatchQueue.main.async(execute: {
+                UNUserNotificationCenter.current().requestAuthorization(options: [[.alert, .sound, .badge]], completionHandler: { (granted, error) in
+                        UIApplication.shared.registerForRemoteNotifications()
+                    })
             })
         }
     
@@ -78,7 +80,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             center.delegate = self
             center.requestAuthorization(options: [.sound, .alert, .badge]) { (granted, error) in
                 if error == nil{
-                    UIApplication.shared.registerForRemoteNotifications()
+                    
+                    DispatchQueue.main.async(execute: {
+                        UIApplication.shared.registerForRemoteNotifications()
+                    })
                 }
             }
         }
