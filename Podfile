@@ -11,6 +11,8 @@ target 'SampleDeveloperApp' do
 
   target 'SampleDeveloperAppTests' do
     inherit! :search_paths
+    pod 'Firebase/Core'
+    pod 'Firebase/Database'
     # Pods for testing
   end
 
