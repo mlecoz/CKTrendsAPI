@@ -83,6 +83,13 @@
             ReferencedContainer = "container:SampleDeveloperApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "SWIFT_DEBUG_IMPLICIT_OBJC_ENTRYPOINT"
+            value = "1"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
