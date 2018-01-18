@@ -10,75 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "537402663.099846"
+            timestampString = "538000252.378669"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "106"
-            endingLineNumber = "106"
-            landmarkName = "userNotificationCenter(_:willPresent:withCompletionHandler:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "537402663.100046"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "135"
-            endingLineNumber = "135"
-            landmarkName = "userNotificationCenter(_:willPresent:withCompletionHandler:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SampleDeveloperApp.AppDelegate.(userNotificationCenter (__ObjC.UNUserNotificationCenter, willPresent : __ObjC.UNNotification, withCompletionHandler : (__C.UNNotificationPresentationOptions) -&gt; ()) -&gt; ()).(closure #1)"
-                  moduleName = "SampleDeveloperApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/MarissaLeCoz/Documents/xCode/SampleDeveloperApp/SampleDeveloperApp/AppDelegate.swift"
-                  timestampString = "531993841.76752"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "130"
-                  endingLineNumber = "130"
-                  offsetFromSymbolStart = "1020">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SampleDeveloperApp.AppDelegate.(userNotificationCenter (__ObjC.UNUserNotificationCenter, willPresent : __ObjC.UNNotification, withCompletionHandler : (__C.UNNotificationPresentationOptions) -&gt; ()) -&gt; ()).(closure #1).(closure #1)"
-                  moduleName = "SampleDeveloperApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/MarissaLeCoz/Documents/xCode/SampleDeveloperApp/SampleDeveloperApp/AppDelegate.swift"
-                  timestampString = "531993841.771127"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "132"
-                  endingLineNumber = "132"
-                  offsetFromSymbolStart = "108">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "537402663.100139"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "userNotificationCenter(_:willPresent:withCompletionHandler:)"
             landmarkType = "7">
          </BreakpointContent>

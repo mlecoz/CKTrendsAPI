@@ -33,8 +33,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         if #available(iOS 10.0, *) {
             DispatchQueue.main.async(execute: {
                 UNUserNotificationCenter.current().requestAuthorization(options: [[.alert, .sound, .badge]], completionHandler: { (granted, error) in
-                        UIApplication.shared.registerForRemoteNotifications()
+                        DispatchQueue.main.async(execute: {
+                            UIApplication.shared.registerForRemoteNotifications()
                     })
+                })
             })
         }
     
@@ -181,6 +183,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+
+    // This function is called when another app on the device opens the URL for this app.
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        
+        // which app opened you
+        let sendingAppID = options[.sourceApplication]
+        print(sendingAppID as! String)
+        
+        return true
     }
 
 }

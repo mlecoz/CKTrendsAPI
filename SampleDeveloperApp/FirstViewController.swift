@@ -39,7 +39,9 @@ class FirstViewController: UIViewController {
             }
             else {
                 print("Error saving to record to CloudKit!")
-                self.successMessage.isHidden = true
+                DispatchQueue.main.async(execute: {
+                    self.successMessage.isHidden = true
+                })
             }
         }
     }
