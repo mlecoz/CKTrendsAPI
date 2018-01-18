@@ -189,10 +189,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         
         // which app opened you
-        let sendingAppID = options[.sourceApplication]
-        print(sendingAppID as! String)
+        guard let sendingAppID = options[.sourceApplication] as? String else {
+            return false
+        }
+        
+        if sendingAppID == "com.MarissaLeCoz.AnalyticsApp" {
+            updateCKTrends()
+        }
         
         return true
+    }
+    
+    func updateCKTrends() {
+        
     }
 
 }
