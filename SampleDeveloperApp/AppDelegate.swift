@@ -210,19 +210,86 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let appID = 1
         let recordTypesToTrack = ["RecordTypeA", "RecordTypeB"]
         
-        guard let firebaseDBRef = self.firebaseDBRef else {
+        guard let uid = Auth.auth().currentUser?.uid else {
             return
         }
         
+        Database.database().reference().child("\(uid)").child("\(appID)").setValue(["STATE": "in_progress"])
+        
         for recordType in recordTypesToTrack {
-            if firebaseDBRef.child("\(appID)").child("TRACKING").child(recordType) == nil {p
-                firebaseDBRef.child("\(appID)").child("TRACKING").setValue(["RecordTypeA": "true"])
+            
+            var isNewRecordType = false
+            
+            // check to see whether the user has tracked this app before
+            let pathString = "\(uid)/\(appID)/TRACKING/\(recordType)"
+            Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
+                if error != nil { // this is a new record type to track
+                    isNewRecordType = true
+                    Database.database().reference().child("\(uid)").child("\(appID)").child("TRACKING").setValue([recordType: "true"])
+                }
             }
+            
+            // if this is a new record type, query all records of this type
+            if isNewRecordType {
+
+                let predicate = NSPredicate(value: true)
+                let query = CKQuery(recordType: recordType, predicate: predicate)
+                
+                self.db.perform(query, inZoneWith: nil) { records, error in
+                    
+                    if error == nil {
+                        
+                        guard let records = records else {
+                            return
+                        }
+                        self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
+                    
+                    }
+                    else {
+                        Database.database().reference().child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
+                    }
+                }
+            }
+            
+            // if this isn't a new record type, query all record since the last time this type was tracked
+            else {
+                
+            }
+            
+            // record LAST_CHECK
+            
         }
-        
-        
-        
     }
 
+    
+    func saveRecordCounts(records: [CKRecord], uid: String, appID: Int, recordType: String) {
+
+        for record in records {
+            guard let date = record["creationDate"] as? Date else {
+                return
+            }
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MM-dd-yy"
+            let formattedDate = formatter.string(from: date)
+            
+            let path = "\(uid)/\(appID)/\(formattedDate)"
+            Database.database().reference().child(path).observeSingleEvent(of: .value) { snapshot, error in
+                var newCount: Int
+                let recordTypeToCountDict = snapshot.value as? [String:Any]? // record type : number
+                if recordTypeToCountDict == nil || recordTypeToCountDict!?[recordType] == nil {
+                    newCount = 1
+                }
+                else {
+                    guard let oldCount = (recordTypeToCountDict!?[recordType] as? NSString)?.integerValue else {
+                        return
+                    }
+                    newCount = oldCount + 1
+                    
+                }
+                Database.database().reference().child("\(appID)").child("\(formattedDate)").setValue([recordType: "\(newCount)"])
+                
+            }
+        }
+    }
 }
 
