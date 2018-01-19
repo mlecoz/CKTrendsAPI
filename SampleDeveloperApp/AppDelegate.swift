@@ -208,7 +208,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func updateCKTrends() {
         
         let appID = 1
-        let recordTypesToTrack = ["RecordTypeA", "RecordTypeB"]
+        let recordTypesToTrack = ["RecordTypeA"] // add B later
         
         guard let uid = Auth.auth().currentUser?.uid else {
             return
@@ -231,11 +231,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 }
                 
                 else {
+                    
                     let recordTypeDict = snapshot.value as? [String:Any]?
-                    guard let recordIsBeingTracked = recordTypeDict!?[recordType] as? Bool else {
-                        return
-                    }
-                    if !recordIsBeingTracked { // this is a new record type to track
+                    if recordTypeDict == nil || recordTypeDict!?[recordType] == nil {
                         isNewRecordType = true
                         Database.database().reference().child("\(uid)").child("\(appID)").child("TRACKING").setValue([recordType: "true"])
                     }
