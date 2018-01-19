@@ -29,12 +29,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         firebaseDBRef = Database.database().reference()
         
         // ADD RECORD TYPES TO TRACKING LIST
-        let appID = 1
-        let recordTypesToTrack = ["RecordTypeA", "RecordTypeB"]
-        
-        guard let firebaseDBRef = self.firebaseDBRef else {
-            return true
-        }
+//        let appID = 1
+//        let recordTypesToTrack = ["RecordTypeA", "RecordTypeB"]
+//
+//        guard let firebaseDBRef = self.firebaseDBRef else {
+//            return true
+//        }
         
         
         //firebaseDBRef.child("\(appID)").child("TRACKING").setValue(["RecordTypeA": "true"])
@@ -349,7 +349,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     newCount = oldCount + 1
                     
                 }
-                Database.database().reference().child("users").child("\(appID)").child("\(formattedDate)").setValue([recordType: "\(newCount)"])
+                Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("\(formattedDate)").setValue([recordType: "\(newCount)"])
                 
             }
         }
