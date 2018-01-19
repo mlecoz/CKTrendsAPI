@@ -11,6 +11,7 @@ import CloudKit
 import UserNotifications
 import Firebase
 import FirebaseDatabase
+import FirebaseAuth
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -194,10 +195,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         
         if sendingAppID == "com.MarissaLeCoz.AnalyticsApp" {
-            updateCKTrends()
+            logIn()
         }
         
         return true
+    }
+    
+    func logIn() {
+        
+        let popUp = UIAlertController(title: "CKTrends Login", message: "Please use your CKTrends username and password to log in and refresh your trend tracking!", preferredStyle: UIAlertControllerStyle.alert)
+        popUp.addTextField() { emailField in
+            emailField.placeholder = "email"
+        }
+        popUp.addTextField() { passwordField in
+            passwordField.placeholder = "password"
+            passwordField.isSecureTextEntry = true
+        }
+        popUp.addAction(UIAlertAction(title: "Login", style: UIAlertActionStyle.default) { alert in
+            
+            let email = popUp.textFields![0].text
+            let password = popUp.textFields![1].text
+
+            Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
+                if (error != nil) {
+                    Utilities.presentAlert(title: "Uh Oh!", message: "Sign in failed. Please check your email and password.", vc: self.window?.rootViewController!)
+                }
+                else {
+                    self.updateCKTrends()
+                }
+            }
+        })
+        popUp.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil))
+
+        self.window?.rootViewController?.present(popUp, animated: true, completion: nil)
+        
     }
     
     func updateCKTrends() {
