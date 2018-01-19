@@ -220,7 +220,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             
             var isNewRecordType = false
             
-            // check to see whether the user has tracked this app before
+            // check to see whether the user has tracked this app before; if not, add it to tracking list
             let pathString = "\(uid)/\(appID)/TRACKING/\(recordType)"
             Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
                 if error != nil { // this is a new record type to track
@@ -242,7 +242,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         guard let records = records else {
                             return
                         }
-                        self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
+                        saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
                     
                     }
                     else {
@@ -254,11 +254,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             // if this isn't a new record type, query all record since the last time this type was tracked
             else {
                 
+                var lastCheck: String
+                let lastCheckPath = "\(uid)/\(appID)/LAST_CHECK/\(recordType)"
+                Database.database().reference().child(lastCheckPath).observeSingleEvent(of: .value) { snapshot, error in
+                    if error != nil {
+                        Database.database().reference().child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
+                    }
+                    else {
+                        let recordTypeToLastCheckDict = snapshot.value as? [String:Any]?
+                        guard let oldCount = (recordTypeToLastCheckDict!?[recordType] as? NSString)?.integerValue else {
+                            
+                        }
+                    }
+                
+                
+                
             }
             
             // record LAST_CHECK
             
+            
         }
+        
+        // success state update must occur within the closures
     }
 
     
