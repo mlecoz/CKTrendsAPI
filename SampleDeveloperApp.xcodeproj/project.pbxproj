@@ -22,6 +22,7 @@
 		E14CB1E71F77577C00F8C23F /* SampleDeveloperAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14CB1E61F77577C00F8C23F /* SampleDeveloperAppTests.swift */; };
 		E14CB1F21F77577C00F8C23F /* SampleDeveloperAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14CB1F11F77577C00F8C23F /* SampleDeveloperAppUITests.swift */; };
 		E14CB2021F77591700F8C23F /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E14CB2011F77591700F8C23F /* CloudKit.framework */; };
+		E1731EE22011A45D0080646C /* CKTrendsUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1731EE12011A45D0080646C /* CKTrendsUtilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		E14CB1F31F77577C00F8C23F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E14CB1FF1F77591300F8C23F /* SampleDeveloperApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SampleDeveloperApp.entitlements; sourceTree = "<group>"; };
 		E14CB2011F77591700F8C23F /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		E1731EE12011A45D0080646C /* CKTrendsUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKTrendsUtilities.swift; sourceTree = "<group>"; };
 		EBE9F5893BB2C2FBF78C8AF6 /* Pods-SampleDeveloperApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleDeveloperApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-SampleDeveloperApp/Pods-SampleDeveloperApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -133,6 +135,7 @@
 				E14CB1D81F77577C00F8C23F /* Assets.xcassets */,
 				E14CB1DA1F77577C00F8C23F /* LaunchScreen.storyboard */,
 				E14CB1DD1F77577C00F8C23F /* Info.plist */,
+				E1731EE12011A45D0080646C /* CKTrendsUtilities.swift */,
 			);
 			path = SampleDeveloperApp;
 			sourceTree = "<group>";
@@ -480,6 +483,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1731EE22011A45D0080646C /* CKTrendsUtilities.swift in Sources */,
 				E14CB1D41F77577C00F8C23F /* SecondViewController.swift in Sources */,
 				E14CB1D01F77577C00F8C23F /* AppDelegate.swift in Sources */,
 				E14CB1D21F77577C00F8C23F /* FirstViewController.swift in Sources */,

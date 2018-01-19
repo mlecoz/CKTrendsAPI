@@ -211,21 +211,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             passwordField.placeholder = "password"
             passwordField.isSecureTextEntry = true
         }
+        
+        popUp.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil))
         popUp.addAction(UIAlertAction(title: "Login", style: UIAlertActionStyle.default) { alert in
             
-            let email = popUp.textFields![0].text
-            let password = popUp.textFields![1].text
+            guard let email = popUp.textFields![0].text, let password = popUp.textFields![1].text else {
+                return
+            }
 
             Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
                 if (error != nil) {
-                    Utilities.presentAlert(title: "Uh Oh!", message: "Sign in failed. Please check your email and password.", vc: self.window?.rootViewController!)
+                    guard let vc = self.window?.rootViewController else {
+                        return
+                    }
+                    CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "Sign in failed. Please check your email and password.", vc: vc)
                 }
                 else {
                     self.updateCKTrends()
                 }
             }
         })
-        popUp.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil))
+        
 
         self.window?.rootViewController?.present(popUp, animated: true, completion: nil)
         
