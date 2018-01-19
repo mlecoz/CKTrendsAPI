@@ -28,73 +28,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         FirebaseApp.configure()
         firebaseDBRef = Database.database().reference()
         
-        registerForRemoteNotification()
-        
-        // configures notif settings for alert message, sound, and badge
-        if #available(iOS 10.0, *) {
-            DispatchQueue.main.async(execute: {
-                UNUserNotificationCenter.current().requestAuthorization(options: [[.alert, .sound, .badge]], completionHandler: { (granted, error) in
-                        DispatchQueue.main.async(execute: {
-                            UIApplication.shared.registerForRemoteNotifications()
-                    })
-                })
-            })
-        }
-    
-        let predicate = NSPredicate(value: true)
-        let subscription = CKQuerySubscription(recordType: "RecordTypeA", predicate: predicate, options: .firesOnRecordCreation)
-        
-        let info = CKNotificationInfo()
-        info.alertLocalizationKey = "NEW_RECORD_A_INSTANCE_ALERT"
-        info.soundName = nil
-        info.shouldBadge = false
-        
-        subscription.notificationInfo = info
-        
-        db.save(subscription) { subscription, error in
-            if (error != nil) {
-                guard let error = error as? CKError else {
-                    return
-                }
-                if (error.errorCode == 15) {
-                    // do nothing; subscription already created; TODO - clean up this inefficiency?
-                }
-                else {
-                    print("Error saving subscription")
-                }
-            }
-        }
-        
         // ADD RECORD TYPES TO TRACKING LIST
-        let appID = 70
+        let appID = 1
+        let recordTypesToTrack = ["RecordTypeA", "RecordTypeB"]
         
         guard let firebaseDBRef = self.firebaseDBRef else {
             return true
         }
+        
         
         firebaseDBRef.child("\(appID)").child("TRACKING").setValue(["RecordTypeA": "true"])
         
         return true
     }
     
-    func registerForRemoteNotification() {
-        if #available(iOS 10.0, *) {
-            let center  = UNUserNotificationCenter.current()
-            center.delegate = self
-            center.requestAuthorization(options: [.sound, .alert, .badge]) { (granted, error) in
-                if error == nil{
-                    
-                    DispatchQueue.main.async(execute: {
-                        UIApplication.shared.registerForRemoteNotifications()
-                    })
-                }
-            }
-        }
-        else {
-            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil))
-            UIApplication.shared.registerForRemoteNotifications()
-        }
-    }
+//    func registerForRemoteNotification() {
+//        if #available(iOS 10.0, *) {
+//            let center  = UNUserNotificationCenter.current()
+//            center.delegate = self
+//            center.requestAuthorization(options: [.sound, .alert, .badge]) { (granted, error) in
+//                if error == nil{
+//
+//                    DispatchQueue.main.async(execute: {
+//                        UIApplication.shared.registerForRemoteNotifications()
+//                    })
+//                }
+//            }
+//        }
+//        else {
+//            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil))
+//            UIApplication.shared.registerForRemoteNotifications()
+//        }
+//    }
     
     // Called when a notification is delivered to a foreground app
     @available(iOS 10.0, *)
@@ -107,14 +72,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // TODO only do this if you are the dev's user id so that this only happens once
         
         let ckNotification = CKNotification(fromRemoteNotificationDictionary: notification.request.content.userInfo as! [String : NSObject])
-        
+
         if ckNotification.notificationType == .query, let queryNotification = ckNotification as? CKQueryNotification {
             let recordID = queryNotification.recordID
-            
+
             guard let rID = recordID else {
                 return
             }
-            
+        
             self.db.fetch(withRecordID: rID) { record, err in
                 if err == nil {
                     
@@ -123,7 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         return
                     }
                     
-                    let appID = 70
+                    let appID = 1
                     
                     let date = Date()
                     let formatter = DateFormatter()
@@ -134,7 +99,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         return
                     }
                     
-                    let path = "\(appID)/\(formattedDate)"
+                    guard let uid = Auth.auth().currentUser?.uid else {
+                        return
+                    }
+                    let path = "\(uid)/\(appID)/\(formattedDate)"
                     firebaseDBRef.child(path).observeSingleEvent(of: .value) { snapshot, error in
                         var newCount: Int
                         let recordTypeToCountDict = snapshot.value as? [String:Any]? // record type : number
@@ -238,6 +206,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func updateCKTrends() {
+        
+        let appID = 1
+        let recordTypesToTrack = ["RecordTypeA", "RecordTypeB"]
+        
+        guard let firebaseDBRef = self.firebaseDBRef else {
+            return
+        }
+        
+        for recordType in recordTypesToTrack {
+            if firebaseDBRef.child("\(appID)").child("TRACKING").child(recordType) == nil {p
+                firebaseDBRef.child("\(appID)").child("TRACKING").setValue(["RecordTypeA": "true"])
+            }
+        }
+        
+        
         
     }
 
