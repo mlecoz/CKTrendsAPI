@@ -253,6 +253,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                 }
                                 self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
                                 
+                                // record LAST_CHECK
+                                let date = Date()
+                                let formatter = DateFormatter()
+                                formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
+                                let formattedDate = formatter.string(from: date)
+                                Database.database().reference().child("\(uid)").child("\(appID)").setValue(["LAST_CHECK": formattedDate]) // today // TODO does this work????
+                                
                             }
                             else {
                                 Database.database().reference().child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
@@ -270,7 +277,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                 Database.database().reference().child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
                             }
                                 
-                                // get the last time this record type was checked and query for everything that day/time and after.
+                            // get the last time this record type was checked and query for everything that day/time and after.
                             else {
                                 let recordTypeToLastCheckDict = snapshot.value as? [String:Any]?
                                 guard let lastCheck = recordTypeToLastCheckDict!?[recordType] as? Date else {
@@ -287,7 +294,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                         guard let records = records else {
                                             return
                                         }
+                                        
                                         self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
+                                        
+                                        // record LAST_CHECK
+                                        let date = Date()
+                                        let formatter = DateFormatter()
+                                        formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
+                                        let formattedDate = formatter.string(from: date)
+                                        Database.database().reference().child("\(uid)").child("\(appID)").setValue(["LAST_CHECK": formattedDate]) // today // TODO does this work????
                                         
                                     }
                                     else {
@@ -298,10 +313,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                             }
                         }
                     }
-                
-                    // record LAST_CHECK
-                    Database.database().reference().child("\(uid)").child("\(appID)").setValue(["LAST_CHECK": Date()]) // today // TODO does this work????
-                
                 }
             }
         }
