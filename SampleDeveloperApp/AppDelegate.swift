@@ -216,6 +216,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         Database.database().reference().child("\(uid)").child("\(appID)").setValue(["STATE": "in_progress"])
         
+        let group = DispatchGroup()
+        
         for recordType in recordTypesToTrack {
             
             var isNewRecordType = false
@@ -242,7 +244,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         guard let records = records else {
                             return
                         }
-                        saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
+                        self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
                     
                     }
                     else {
@@ -260,23 +262,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     if error != nil {
                         Database.database().reference().child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
                     }
+                    
+                    // get the last time this record type was checked and query for everything that day/time and after.
                     else {
                         let recordTypeToLastCheckDict = snapshot.value as? [String:Any]?
-                        guard let oldCount = (recordTypeToLastCheckDict!?[recordType] as? NSString)?.integerValue else {
-                            
+                        guard let lastCheck = recordTypeToLastCheckDict!?[recordType] as? Date else {
+                            return
                         }
+                        
+                        let predicate = NSPredicate(format: "%K > %@", "creationDate", lastCheck as CVarArg) // TODO does this work???
+                        let query = CKQuery(recordType: recordType, predicate: predicate)
+                        
+                        self.db.perform(query, inZoneWith: nil) { records, error in
+                            
+                            if error == nil {
+                                
+                                guard let records = records else {
+                                    return
+                                }
+                                self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
+                                
+                            }
+                            else {
+                                Database.database().reference().child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
+                            }
+                        }
+ 
                     }
-                
-                
-                
+                }
             }
             
             // record LAST_CHECK
-            
+            Database.database().reference().child("\(uid)").child("\(appID)").setValue(["LAST_CHECK": Date()]) // today // TODO does this work????
             
         }
         
-        // success state update must occur within the closures
+        // if we've gotten here, then all the different types were updated
+        group.notify(queue: .global(), execute: {
+            Database.database().reference().child("\(uid)").child("\(appID)").setValue(["STATE": "succeeded"])
+        })
+        
     }
 
     
