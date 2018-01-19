@@ -37,7 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         
         
-        firebaseDBRef.child("\(appID)").child("TRACKING").setValue(["RecordTypeA": "true"])
+        //firebaseDBRef.child("\(appID)").child("TRACKING").setValue(["RecordTypeA": "true"])
         
         return true
     }
@@ -62,75 +62,75 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //    }
     
     // Called when a notification is delivered to a foreground app
-    @available(iOS 10.0, *)
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        
-        // NOTE TO SELF: This is invoked by other instances of the sample app. The creator of an instance of a tracked record type
-        // does not receive a notification. So, create records from the simulator, and this method gets invoked by the version 
-        // running on my phone.
-        
-        // TODO only do this if you are the dev's user id so that this only happens once
-        
-        let ckNotification = CKNotification(fromRemoteNotificationDictionary: notification.request.content.userInfo as! [String : NSObject])
-
-        if ckNotification.notificationType == .query, let queryNotification = ckNotification as? CKQueryNotification {
-            let recordID = queryNotification.recordID
-
-            guard let rID = recordID else {
-                return
-            }
-        
-            self.db.fetch(withRecordID: rID) { record, err in
-                if err == nil {
-                    
-                    // send change to firebase
-                    guard let firebaseDBRef = self.firebaseDBRef else {
-                        return
-                    }
-                    
-                    let appID = 1
-                    
-                    let date = Date()
-                    let formatter = DateFormatter()
-                    formatter.dateFormat = "MM-dd-yy"
-                    let formattedDate = formatter.string(from: date)
-                    
-                    guard let recordType = record?.recordType else {
-                        return
-                    }
-                    
-                    guard let uid = Auth.auth().currentUser?.uid else {
-                        return
-                    }
-                    let path = "\(uid)/\(appID)/\(formattedDate)"
-                    firebaseDBRef.child(path).observeSingleEvent(of: .value) { snapshot, error in
-                        var newCount: Int
-                        let recordTypeToCountDict = snapshot.value as? [String:Any]? // record type : number
-                        if recordTypeToCountDict == nil || recordTypeToCountDict!?[recordType] == nil {
-                            newCount = 1
-                        }
-                        else {
-                            guard let oldCount = (recordTypeToCountDict!?[recordType] as? NSString)?.integerValue else {
-                                return
-                            }
-                            newCount = oldCount + 1
-                            
-                        }
-                        firebaseDBRef.child("\(appID)").child("\(formattedDate)").setValue([recordType: "\(newCount)"])
-
-                    }
-                    
-                }
-            }
-
-        }
-    }
-    
-    @available(iOS 10.0, *)
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        //print("User Info = ",response.notification.request.content.userInfo)
-        completionHandler()
-    }
+//    @available(iOS 10.0, *)
+//    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+//
+//        // NOTE TO SELF: This is invoked by other instances of the sample app. The creator of an instance of a tracked record type
+//        // does not receive a notification. So, create records from the simulator, and this method gets invoked by the version
+//        // running on my phone.
+//
+//        // TODO only do this if you are the dev's user id so that this only happens once
+//
+//        let ckNotification = CKNotification(fromRemoteNotificationDictionary: notification.request.content.userInfo as! [String : NSObject])
+//
+//        if ckNotification.notificationType == .query, let queryNotification = ckNotification as? CKQueryNotification {
+//            let recordID = queryNotification.recordID
+//
+//            guard let rID = recordID else {
+//                return
+//            }
+//
+//            self.db.fetch(withRecordID: rID) { record, err in
+//                if err == nil {
+//
+//                    // send change to firebase
+//                    guard let firebaseDBRef = self.firebaseDBRef else {
+//                        return
+//                    }
+//
+//                    let appID = 1
+//
+//                    let date = Date()
+//                    let formatter = DateFormatter()
+//                    formatter.dateFormat = "MM-dd-yy"
+//                    let formattedDate = formatter.string(from: date)
+//
+//                    guard let recordType = record?.recordType else {
+//                        return
+//                    }
+//
+//                    guard let uid = Auth.auth().currentUser?.uid else {
+//                        return
+//                    }
+//                    let path = "users/\(uid)/\(appID)/\(formattedDate)"
+//                    firebaseDBRef.child(path).observeSingleEvent(of: .value) { snapshot, error in
+//                        var newCount: Int
+//                        let recordTypeToCountDict = snapshot.value as? [String:Any]? // record type : number
+//                        if recordTypeToCountDict == nil || recordTypeToCountDict!?[recordType] == nil {
+//                            newCount = 1
+//                        }
+//                        else {
+//                            guard let oldCount = (recordTypeToCountDict!?[recordType] as? NSString)?.integerValue else {
+//                                return
+//                            }
+//                            newCount = oldCount + 1
+//
+//                        }
+//                        firebaseDBRef.child("\(appID)").child("\(formattedDate)").setValue([recordType: "\(newCount)"])
+//
+//                    }
+//
+//                }
+//            }
+//
+//        }
+//    }
+//
+//    @available(iOS 10.0, *)
+//    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+//        //print("User Info = ",response.notification.request.content.userInfo)
+//        completionHandler()
+//    }
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -214,7 +214,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             return
         }
         
-        Database.database().reference().child("\(uid)").child("\(appID)").setValue(["STATE": "in_progress"])
+        Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "in_progress"])
         
         let group = DispatchGroup()
         
@@ -223,11 +223,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             var isNewRecordType = false
             
             // check to see whether the user has tracked this app before; if not, add it to tracking list
-            let pathString = "\(uid)/\(appID)/TRACKING"
+            let pathString = "users/\(uid)/\(appID)/TRACKING"
             Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
                
                 if error != nil {
-                    Database.database().reference().child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
+                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
                 }
                 
                 else {
@@ -235,7 +235,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     let recordTypeDict = snapshot.value as? [String:Any]?
                     if recordTypeDict == nil || recordTypeDict!?[recordType] == nil {
                         isNewRecordType = true
-                        Database.database().reference().child("\(uid)").child("\(appID)").child("TRACKING").setValue([recordType: "true"])
+                        Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("TRACKING").setValue([recordType: "true"])
                     }
                 
                     // if this is a new record type, query all records of this type
@@ -258,11 +258,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                 let formatter = DateFormatter()
                                 formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
                                 let formattedDate = formatter.string(from: date)
-                                Database.database().reference().child("\(uid)").child("\(appID)").setValue(["LAST_CHECK": formattedDate]) // today // TODO does this work????
+                                Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["LAST_CHECK": formattedDate]) // today // TODO does this work????
                                 
                             }
                             else {
-                                Database.database().reference().child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
+                                Database.database().reference().child("users/\(uid)").child("\(appID)").setValue(["STATE": "failed"])
                             }
                         }
                     }
@@ -271,10 +271,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     else {
                         
                         var lastCheck: String
-                        let lastCheckPath = "\(uid)/\(appID)/LAST_CHECK/\(recordType)"
+                        let lastCheckPath = "users/\(uid)/\(appID)/LAST_CHECK/\(recordType)"
                         Database.database().reference().child(lastCheckPath).observeSingleEvent(of: .value) { snapshot, error in
                             if error != nil {
-                                Database.database().reference().child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
+                                Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
                             }
                                 
                             // get the last time this record type was checked and query for everything that day/time and after.
@@ -302,11 +302,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                         let formatter = DateFormatter()
                                         formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
                                         let formattedDate = formatter.string(from: date)
-                                        Database.database().reference().child("\(uid)").child("\(appID)").setValue(["LAST_CHECK": formattedDate]) // today // TODO does this work????
+                                        Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["LAST_CHECK": formattedDate]) // today // TODO does this work????
                                         
                                     }
                                     else {
-                                        Database.database().reference().child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
+                                        Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
                                     }
                                 }
                                 
@@ -319,7 +319,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         // if we've gotten here, then all the different types were updated
         group.notify(queue: .global(), execute: {
-            Database.database().reference().child("\(uid)").child("\(appID)").setValue(["STATE": "succeeded"])
+            Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "succeeded"])
         })
         
     }
@@ -335,7 +335,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             formatter.dateFormat = "MM-dd-yy"
             let formattedDate = formatter.string(from: date)
             
-            let path = "\(uid)/\(appID)/\(formattedDate)"
+            let path = "users/\(uid)/\(appID)/\(formattedDate)"
             Database.database().reference().child(path).observeSingleEvent(of: .value) { snapshot, error in
                 var newCount: Int
                 let recordTypeToCountDict = snapshot.value as? [String:Any]? // record type : number
@@ -349,7 +349,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     newCount = oldCount + 1
                     
                 }
-                Database.database().reference().child("\(appID)").child("\(formattedDate)").setValue([recordType: "\(newCount)"])
+                Database.database().reference().child("users").child("\(appID)").child("\(formattedDate)").setValue([recordType: "\(newCount)"])
                 
             }
         }
