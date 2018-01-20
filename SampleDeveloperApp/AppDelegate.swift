@@ -195,7 +195,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "Sign in failed. Please check your email and password. Tap the Refresh button in CKTrends to try again.", vc: vc)
                 }
                 else {
-                    self.updateCKTrends()
+                    guard let uid = user?.uid else {
+                        return
+                    }
+                    self.updateCKTrends(uid: uid)
                 }
             }
         })
@@ -205,14 +208,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
     }
     
-    func updateCKTrends() {
+    func updateCKTrends(uid: String) {
         
         let appID = 1
         let recordTypesToTrack = ["RecordTypeA"] // add B later
-        
-        guard let uid = Auth.auth().currentUser?.uid else {
-            return
-        }
         
         Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "in_progress"])
         
@@ -327,6 +326,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func saveRecordCounts(records: [CKRecord], uid: String, appID: Int, recordType: String) {
 
+        var dateToCountDict = [String:Int]()
+        
         for record in records {
             guard let date = record["creationDate"] as? Date else {
                 return
@@ -335,24 +336,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             formatter.dateFormat = "MM-dd-yy"
             let formattedDate = formatter.string(from: date)
             
-            let path = "users/\(uid)/\(appID)/\(formattedDate)"
-            Database.database().reference().child(path).observeSingleEvent(of: .value) { snapshot, error in
-                var newCount: Int
-                let recordTypeToCountDict = snapshot.value as? [String:Any]? // record type : number
-                if recordTypeToCountDict == nil || recordTypeToCountDict!?[recordType] == nil {
-                    newCount = 1
-                }
-                else {
-                    guard let oldCount = (recordTypeToCountDict!?[recordType] as? NSString)?.integerValue else {
-                        return
-                    }
-                    newCount = oldCount + 1
-                    
-                }
-                Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("\(formattedDate)").setValue([recordType: "\(newCount)"])
-                
+            if dateToCountDict[formattedDate] != nil {
+                dateToCountDict[formattedDate] = dateToCountDict[formattedDate]! + 1
             }
+            else {
+                dateToCountDict[formattedDate] = 1
+            }
+        }
+        
+        // now the dictionary is populated; add to firebase db
+        for (date, count) in dateToCountDict {
+            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("\(date)").setValue([recordType: "\(count)"])
         }
     }
 }
+
+//let path = "users/\(uid)/\(appID)/\(formattedDate)"
+//Database.database().reference().child(path).observeSingleEvent(of: .value) { snapshot, error in
+//    var newCount: Int
+//    let recordTypeToCountDict = snapshot.value as? [String:Any]? // record type : number
+//    if recordTypeToCountDict == nil || recordTypeToCountDict!?[recordType] == nil {
+//        newCount = 1
+//    }
+//    else {
+//        guard let oldCount = (recordTypeToCountDict!?[recordType] as? NSString)?.integerValue else {
+//            return
+//        }
+//        newCount = oldCount + 1
+//
+//    }
+//    Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("\(formattedDate)").setValue([recordType: "\(newCount)"])
+//
+//}
 
