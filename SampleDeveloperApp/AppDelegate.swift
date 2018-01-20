@@ -213,77 +213,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let appID = 1
         let recordTypesToTrack = ["RecordTypeA"] // add B later
         
-        Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "in_progress"])
-        
-        let group = DispatchGroup()
-        
-        for recordType in recordTypesToTrack {
+        Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "in_progress"], withCompletionBlock: { (error, ref) in
             
-            var isNewRecordType = false
-            
-            // check to see whether the user has tracked this app before; if not, add it to tracking list
-            let pathString = "users/\(uid)/\(appID)/TRACKING"
-            Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
-               
-                if error != nil {
-                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
-                }
+            if error == nil {
+                let group = DispatchGroup()
                 
-                else {
+                for recordType in recordTypesToTrack {
                     
-                    let recordTypeDict = snapshot.value as? [String:Any]?
-                    if recordTypeDict == nil || recordTypeDict!?[recordType] == nil {
-                        isNewRecordType = true
-                        Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("TRACKING").setValue([recordType: "true"])
-                    }
-                
-                    // if this is a new record type, query all records of this type
-                    if isNewRecordType {
+                    var isNewRecordType = false
+                    
+                    // check to see whether the user has tracked this app before; if not, add it to tracking list
+                    let pathString = "users/\(uid)/\(appID)/TRACKING"
+                    Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
                         
-                        let predicate = NSPredicate(value: true)
-                        let query = CKQuery(recordType: recordType, predicate: predicate)
-                        
-                        self.db.perform(query, inZoneWith: nil) { records, error in
-                            
-                            if error == nil {
+                        if error != nil {
+                            Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "failed"], withCompletionBlock: { (error, ref) in
                                 
-                                guard let records = records else {
-                                    return
-                                }
-                                self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
-                                
-                                // record LAST_CHECK
-                                let date = Date()
-                                let formatter = DateFormatter()
-                                formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
-                                let formattedDate = formatter.string(from: date)
-                                Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["LAST_CHECK": formattedDate]) // today // TODO does this work????
-                                
-                            }
-                            else {
-                                Database.database().reference().child("users/\(uid)").child("\(appID)").setValue(["STATE": "failed"])
-                            }
+                            })
                         }
-                    }
-                        
-                    // if this isn't a new record type, query all record since the last time this type was tracked
-                    else {
-                        
-                        var lastCheck: String
-                        let lastCheckPath = "users/\(uid)/\(appID)/LAST_CHECK/\(recordType)"
-                        Database.database().reference().child(lastCheckPath).observeSingleEvent(of: .value) { snapshot, error in
-                            if error != nil {
-                                Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
+                            
+                        else {
+                            
+                            let recordTypeDict = snapshot.value as? [String:Any]?
+                            if recordTypeDict == nil || recordTypeDict!?[recordType] == nil {
+                                isNewRecordType = true
+                                Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("TRACKING").setValue([recordType: "true"], withCompletionBlock: { (error, ref) in
+                                    if error == nil {
+                                        
+                                    }
+                                    else {
+                                        
+                                    }
+                                })
                             }
+                            
+                            // if this is a new record type, query all records of this type
+                            if isNewRecordType {
                                 
-                            // get the last time this record type was checked and query for everything that day/time and after.
-                            else {
-                                let recordTypeToLastCheckDict = snapshot.value as? [String:Any]?
-                                guard let lastCheck = recordTypeToLastCheckDict!?[recordType] as? Date else {
-                                    return
-                                }
-                                
-                                let predicate = NSPredicate(format: "%K > %@", "creationDate", lastCheck as CVarArg) // TODO does this work???
+                                let predicate = NSPredicate(value: true)
                                 let query = CKQuery(recordType: recordType, predicate: predicate)
                                 
                                 self.db.perform(query, inZoneWith: nil) { records, error in
@@ -293,7 +260,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                         guard let records = records else {
                                             return
                                         }
-                                        
                                         self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
                                         
                                         // record LAST_CHECK
@@ -305,22 +271,70 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                         
                                     }
                                     else {
-                                        Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
+                                        Database.database().reference().child("users/\(uid)").child("\(appID)").setValue(["STATE": "failed"])
                                     }
                                 }
+                            }
                                 
+                                // if this isn't a new record type, query all record since the last time this type was tracked
+                            else {
+                                
+                                var lastCheck: String
+                                let lastCheckPath = "users/\(uid)/\(appID)/LAST_CHECK/\(recordType)"
+                                Database.database().reference().child(lastCheckPath).observeSingleEvent(of: .value) { snapshot, error in
+                                    if error != nil {
+                                        Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
+                                    }
+                                        
+                                        // get the last time this record type was checked and query for everything that day/time and after.
+                                    else {
+                                        let recordTypeToLastCheckDict = snapshot.value as? [String:Any]?
+                                        guard let lastCheck = recordTypeToLastCheckDict!?[recordType] as? Date else {
+                                            return
+                                        }
+                                        
+                                        let predicate = NSPredicate(format: "%K > %@", "creationDate", lastCheck as CVarArg) // TODO does this work???
+                                        let query = CKQuery(recordType: recordType, predicate: predicate)
+                                        
+                                        self.db.perform(query, inZoneWith: nil) { records, error in
+                                            
+                                            if error == nil {
+                                                
+                                                guard let records = records else {
+                                                    return
+                                                }
+                                                
+                                                self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
+                                                
+                                                // record LAST_CHECK
+                                                let date = Date()
+                                                let formatter = DateFormatter()
+                                                formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
+                                                let formattedDate = formatter.string(from: date)
+                                                Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["LAST_CHECK": formattedDate]) // today // TODO does this work????
+                                                
+                                            }
+                                            else {
+                                                Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "failed"])
+                                            }
+                                        }
+                                        
+                                    }
+                                }
                             }
                         }
                     }
                 }
+                
+                // if we've gotten here, then all the different types were updated
+                group.notify(queue: .global(), execute: {
+                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "succeeded"])
+                })
             }
-        }
-        
-        // if we've gotten here, then all the different types were updated
-        group.notify(queue: .global(), execute: {
-            Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "succeeded"])
+            else {
+                
+            }
         })
-        
     }
 
     
