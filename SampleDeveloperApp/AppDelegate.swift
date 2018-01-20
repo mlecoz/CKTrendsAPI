@@ -12,6 +12,7 @@ import UserNotifications
 import Firebase
 import FirebaseDatabase
 import FirebaseAuth
+import PromiseKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
