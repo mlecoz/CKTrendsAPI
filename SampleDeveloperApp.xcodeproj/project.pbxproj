@@ -13,6 +13,7 @@
 		E11E76741F8C816F00FEA764 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E11E76731F8C816F00FEA764 /* GoogleService-Info.plist */; };
 		E11E76751F8C816F00FEA764 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E11E76731F8C816F00FEA764 /* GoogleService-Info.plist */; };
 		E11E76761F8C816F00FEA764 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E11E76731F8C816F00FEA764 /* GoogleService-Info.plist */; };
+		E13528E220140080006272EF /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E13528D92014002F006272EF /* PromiseKit.framework */; };
 		E14CB1D01F77577C00F8C23F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14CB1CF1F77577C00F8C23F /* AppDelegate.swift */; };
 		E14CB1D21F77577C00F8C23F /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14CB1D11F77577C00F8C23F /* FirstViewController.swift */; };
 		E14CB1D41F77577C00F8C23F /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14CB1D31F77577C00F8C23F /* SecondViewController.swift */; };
@@ -26,6 +27,41 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		E13528D82014002F006272EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E13528D02014002F006272EF /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63B0AC571D595E1B00FA21D9;
+			remoteInfo = PromiseKit;
+		};
+		E13528DA2014002F006272EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E13528D02014002F006272EF /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 631751A81D59766500A9DDDC;
+			remoteInfo = "PMKA+Tests";
+		};
+		E13528DC2014002F006272EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E13528D02014002F006272EF /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6314113C1D59795700E24B9E;
+			remoteInfo = PMKBridgeTests;
+		};
+		E13528DE2014002F006272EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E13528D02014002F006272EF /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 630019221D596292003B4E30;
+			remoteInfo = PMKCoreTests;
+		};
+		E13528E02014002F006272EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E13528D02014002F006272EF /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6314112F1D5978D700E24B9E;
+			remoteInfo = PMKDispatchTests;
+		};
 		E14CB1E31F77577C00F8C23F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E14CB1C41F77577C00F8C23F /* Project object */;
@@ -52,6 +88,7 @@
 		C9A417783EDAB654E9EFF656 /* Pods_SampleDeveloperAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SampleDeveloperAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D24D217A15BB19D06A83C602 /* Pods-SampleDeveloperAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleDeveloperAppTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SampleDeveloperAppTests/Pods-SampleDeveloperAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E11E76731F8C816F00FEA764 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "/Users/MarissaLeCoz/Documents/xCode/SampleDeveloperApp/SampleDeveloperApp/../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<absolute>"; };
+		E13528D02014002F006272EF /* PromiseKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = PromiseKit.xcodeproj; sourceTree = "<group>"; };
 		E14CB1CC1F77577C00F8C23F /* SampleDeveloperApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleDeveloperApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E14CB1CF1F77577C00F8C23F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E14CB1D11F77577C00F8C23F /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -77,6 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E13528E220140080006272EF /* PromiseKit.framework in Frameworks */,
 				E14CB2021F77591700F8C23F /* CloudKit.framework in Frameworks */,
 				1DE77A4F8A73F2CC37E30F20 /* Pods_SampleDeveloperApp.framework in Frameworks */,
 			);
@@ -101,9 +139,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E13528CF20140025006272EF /* Third Party Libs */ = {
+			isa = PBXGroup;
+			children = (
+				E13528D02014002F006272EF /* PromiseKit.xcodeproj */,
+			);
+			path = "Third Party Libs";
+			sourceTree = "<group>";
+		};
+		E13528D12014002F006272EF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E13528D92014002F006272EF /* PromiseKit.framework */,
+				E13528DB2014002F006272EF /* PMKA+Tests.xctest */,
+				E13528DD2014002F006272EF /* PMKBridgeTests.xctest */,
+				E13528DF2014002F006272EF /* PMKCoreTests.xctest */,
+				E13528E12014002F006272EF /* PMKDispatchTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		E14CB1C31F77577C00F8C23F = {
 			isa = PBXGroup;
 			children = (
+				E13528CF20140025006272EF /* Third Party Libs */,
 				E14CB1CE1F77577C00F8C23F /* SampleDeveloperApp */,
 				E14CB1E51F77577C00F8C23F /* SampleDeveloperAppTests */,
 				E14CB1F01F77577C00F8C23F /* SampleDeveloperAppUITests */,
@@ -301,6 +360,12 @@
 			mainGroup = E14CB1C31F77577C00F8C23F;
 			productRefGroup = E14CB1CD1F77577C00F8C23F /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = E13528D12014002F006272EF /* Products */;
+					ProjectRef = E13528D02014002F006272EF /* PromiseKit.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				E14CB1CB1F77577C00F8C23F /* SampleDeveloperApp */,
@@ -309,6 +374,44 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		E13528D92014002F006272EF /* PromiseKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PromiseKit.framework;
+			remoteRef = E13528D82014002F006272EF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E13528DB2014002F006272EF /* PMKA+Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "PMKA+Tests.xctest";
+			remoteRef = E13528DA2014002F006272EF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E13528DD2014002F006272EF /* PMKBridgeTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PMKBridgeTests.xctest;
+			remoteRef = E13528DC2014002F006272EF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E13528DF2014002F006272EF /* PMKCoreTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PMKCoreTests.xctest;
+			remoteRef = E13528DE2014002F006272EF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E13528E12014002F006272EF /* PMKDispatchTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PMKDispatchTests.xctest;
+			remoteRef = E13528E02014002F006272EF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		E14CB1CA1F77577C00F8C23F /* Resources */ = {
