@@ -212,7 +212,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         let appID = 1
         let recordTypesToTrack = ["RecordTypeA"] // add B later
-        var success = 1 // means everything is good
+        //var success = 1 // means everything is good
         
         Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "in_progress"], withCompletionBlock: { (error, ref) in
             
@@ -231,7 +231,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         if error != nil {
                             Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "failed"], withCompletionBlock: { (error, ref) in
                                 if error != nil {
-                                    success = 0
+                                    //success = 0
                                     group.leave()
                                 }
                             })
@@ -264,25 +264,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                                 guard let records = records else {
                                                     return
                                                 }
-                                                self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
-                                                
-                                                // record LAST_CHECK
-                                                let date = Date()
-                                                let formatter = DateFormatter()
-                                                formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
-                                                let formattedDate = formatter.string(from: date)
-                                                Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["LAST_CHECK": formattedDate], withCompletionBlock: { (error, ref) in
-                                                    if error != nil {
-                                                        success = 0
-                                                        group.leave()
-                                                    }
-                                                }) // today // TODO does this work????
-                                                
+                                                self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType, group: group)
+         
                                             }
                                             else {
                                                 Database.database().reference().child("users/\(uid)").child("\(appID)").setValue(["STATE": "failed"], withCompletionBlock: { (error, ref) in
                                                     if error != nil {
-                                                        success = 0
+                                                        //success = 0
                                                         group.leave()
                                                     }
                                                 })
@@ -298,7 +286,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                             if error != nil {
                                                 Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "failed"], withCompletionBlock: { (error, ref) in
                                                     if error != nil {
-                                                        success = 0
+                                                        //success = 0
                                                         group.leave()
                                                     }
                                                 })
@@ -322,24 +310,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                                             return
                                                         }
                                                         
-                                                        self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
-                                                        
-                                                        // record LAST_CHECK
-                                                        let date = Date()
-                                                        let formatter = DateFormatter()
-                                                        formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
-                                                        let formattedDate = formatter.string(from: date)
-                                                        Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["LAST_CHECK": formattedDate], withCompletionBlock: { (error, ref) in
-                                                            if error != nil {
-                                                                success = 0
-                                                                group.leave()
-                                                            }
-                                                        }) // today // TODO does this work????
+                                                        self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType, group: group)
+
                                                     }
                                                     else {
                                                         Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "failed"], withCompletionBlock: { (error, ref) in
                                                             if error != nil {
-                                                                success = 0
+                                                                //success = 0
                                                                 group.leave()
                                                             }
                                                         })
@@ -353,21 +330,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         }
                     }
                 }
+                group.notify(queue: .global(), execute: {
+                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "succeeded"])
+                })
             }
             else {
-                success = 0
-                group.leave()
+                // ??
             }
-        })
-                
-        // if we've gotten here, then all the different types were updated
-        group.notify(queue: .global(), execute: {
-            Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "succeeded"])
         })
     }
 
     
-    func saveRecordCounts(records: [CKRecord], uid: String, appID: Int, recordType: String) {
+    func saveRecordCounts(records: [CKRecord], uid: String, appID: Int, recordType: String, group: DispatchGroup) {
 
         var dateToCountDict = [String:Int]()
         
@@ -389,7 +363,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         // now the dictionary is populated; add to firebase db
         for (date, count) in dateToCountDict {
-            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("\(date)").setValue([recordType: "\(count)"])
+            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("\(date)").setValue([recordType: "\(count)"], withCompletionBlock: { (error, ref) in
+                if error == nil {
+                    // record LAST_CHECK
+                    let date = Date()
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
+                    let formattedDate = formatter.string(from: date)
+                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["LAST_CHECK": formattedDate], withCompletionBlock: { (error, ref) in
+                        if error != nil {
+                            //success = 0
+                            group.leave()
+                        }
+                        else {
+                            group.leave()
+                        }
+                    }) // today // TODO does this work????
+                }
+                else {
+                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "failed"], withCompletionBlock: { (error, ref) in
+                        if error != nil {
+                            //success = 0
+                            group.leave()
+                        }
+                    })
+                }
+            })
         }
     }
 }
