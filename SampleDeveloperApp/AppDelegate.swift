@@ -115,26 +115,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let appID = 1
         let recordTypesToTrack = ["RecordTypeA", "RecordTypeB"] // add B later
         
-        for recordType in recordTypesToTrack {
+        var recordTypesDict = [String:String]()
+        for type in recordTypesToTrack {
+            recordTypesDict[type] = "true"
+        }
+        
+        // "set" overrides everything in that path, which is what we want, like if the user decided to stop tracking a record type
+        Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("TRACKING").setValue(recordTypesDict, withCompletionBlock: { (error, ref) in
             
-            // check to see whether the user has checked this record type before; if not, add it to tracking list
-            let pathString = "users/\(uid)/\(appID)/LAST_CHECK"
-            Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
+            if error == nil {
+        
+                for recordType in recordTypesToTrack {
+            
+                    // check to see whether the user has checked this record type before; if not, add it to tracking list
+                    let pathString = "users/\(uid)/\(appID)/LAST_CHECK"
+                    Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
                 
-                let recordTypeToLastCheckDict = snapshot.value as? [String:Any]? // record type : last check date
+                        let recordTypeToLastCheckDict = snapshot.value as? [String:Any]? // record type : last check date
                 
-                if error == nil {
-                    
-                    var isNewRecordType = false // default
-                    if recordTypeToLastCheckDict == nil || recordTypeToLastCheckDict!?[recordType] == nil {
-                        isNewRecordType = true
-                    }
-                    
-                    // add this record type to tracking (even if already there). It's just easier in terms of asynchronicity to add it again
-                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("TRACKING").updateChildValues([recordType: "true"], withCompletionBlock: { (error, ref) in
-
                         if error == nil {
-                            
+                    
+                            var isNewRecordType = false // default
+                            if recordTypeToLastCheckDict == nil || recordTypeToLastCheckDict!?[recordType] == nil {
+                                isNewRecordType = true
+                            }
+
                             // if this is a new record type, query all records of this type
                             if isNewRecordType {
                                 let predicate = NSPredicate(value: true)
@@ -153,7 +158,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                             // edge case: include that day itself. (Suppose that the user checked midday, and now they check again later in the
                             // day. To avoid overriding the count from earlier in the day, we need query for all records created on that day.)
                             else {
-                                
+                            
                                 guard let lastCheckAsStr = recordTypeToLastCheckDict!?[recordType] as? String else {
                                     return
                                 }
@@ -170,10 +175,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                 }
                             }
                         }
-                    })
+                    }
                 }
             }
-        }
+        })
     }
     
     func saveRecordCounts(records: [CKRecord], uid: String, appID: Int, recordType: String) {
