@@ -42,23 +42,11 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
-  - PromiseKit (4.5.1):
-    - PromiseKit/Foundation (= 4.5.1)
-    - PromiseKit/QuartzCore (= 4.5.1)
-    - PromiseKit/UIKit (= 4.5.1)
-  - PromiseKit/CorePromise (4.5.1)
-  - PromiseKit/Foundation (4.5.1):
-    - PromiseKit/CorePromise
-  - PromiseKit/QuartzCore (4.5.1):
-    - PromiseKit/CorePromise
-  - PromiseKit/UIKit (4.5.1):
-    - PromiseKit/CorePromise
 
 DEPENDENCIES:
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
-  - PromiseKit
 
 SPEC CHECKSUMS:
   Firebase: 710decbbc6d9d48530e9a5dba3209740c3532e05
@@ -71,8 +59,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: ebaa1f79a5366922c1735f1566901f50beba23b7
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
-  PromiseKit: 445dac9b2c3c3b4b31b5f842bc325700b848a8bd
 
-PODFILE CHECKSUM: fac8025476dc480413e71b5856b5d6277046c413
+PODFILE CHECKSUM: e7e9ffc0c5c469dacb9dc3ef46a93f3a667de4a9
 
 COCOAPODS: 1.2.0

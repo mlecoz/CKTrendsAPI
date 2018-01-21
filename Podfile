@@ -9,7 +9,6 @@ target 'SampleDeveloperApp' do
   pod 'Firebase/Core'
   pod 'Firebase/Database'
   pod 'Firebase/Auth'
-  pod 'PromiseKit'
 
   target 'SampleDeveloperAppTests' do
     inherit! :search_paths
@@ -17,7 +16,6 @@ target 'SampleDeveloperApp' do
   #  pod 'Firebase/Auth'
   #  pod 'Firebase/Core'
   #  pod 'Firebase/Database'
-  #  pod 'PromiseKit'
   end
 
   target 'SampleDeveloperAppUITests' do
@@ -25,7 +23,6 @@ target 'SampleDeveloperApp' do
     # Pods for testing
   #  pod 'Firebase/Core'
   #  pod 'Firebase/Database'
-  #  pod 'PromiseKit'
   #  pod 'Firebase/Auth'
   end
 

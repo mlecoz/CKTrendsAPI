@@ -12,7 +12,6 @@ import UserNotifications
 import Firebase
 import FirebaseDatabase
 import FirebaseAuth
-import PromiseKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -108,31 +107,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
     }
     
+    
+    
     func updateCKTrends(uid: String) {
         
         let appID = 1
         let recordTypesToTrack = ["RecordTypeA"] // add B later
         //var success = 1 // means everything is good
         
-        Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "in_progress"], withCompletionBlock: { (error, ref) in
+        Database.database().reference().child("users").child("\(uid)").child("\(appID)").updateChildValues(["STATE": "in_progress"], withCompletionBlock: { (error, ref) in
             
             if error == nil {
                 
-                let group = DispatchGroup()
-                
                 for recordType in recordTypesToTrack {
-                    
-                    group.enter()
                     
                     // check to see whether the user has tracked this app before; if not, add it to tracking list
                     let pathString = "users/\(uid)/\(appID)/TRACKING"
                     Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
                         
                         if error != nil {
-                            Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "failed"], withCompletionBlock: { (error, ref) in
+                            Database.database().reference().child("users").child("\(uid)").child("\(appID)").updateChildValues(["STATE": "failed"], withCompletionBlock: { (error, ref) in
                                 if error != nil {
                                     //success = 0
-                                    group.leave()
                                 }
                             })
                         }
@@ -147,7 +143,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                             }
                             
                             // add to tracking (even if already there). It's just easier in terms of asynchronicity
-                            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("TRACKING").setValue([recordType: "true"], withCompletionBlock: { (error, ref) in
+                            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("TRACKING").updateChildValues([recordType: "true"], withCompletionBlock: { (error, ref) in
 
                                 if error == nil {
                                     
@@ -164,14 +160,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                                 guard let records = records else {
                                                     return
                                                 }
-                                                self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType, group: group)
+                                                self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
          
                                             }
                                             else {
-                                                Database.database().reference().child("users/\(uid)").child("\(appID)").setValue(["STATE": "failed"], withCompletionBlock: { (error, ref) in
+                                                Database.database().reference().child("users/\(uid)").child("\(appID)").updateChildValues(["STATE": "failed"], withCompletionBlock: { (error, ref) in
                                                     if error != nil {
                                                         //success = 0
-                                                        group.leave()
                                                     }
                                                 })
                                             }
@@ -184,10 +179,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                         let lastCheckPath = "users/\(uid)/\(appID)/LAST_CHECK/\(recordType)"
                                         Database.database().reference().child(lastCheckPath).observeSingleEvent(of: .value) { snapshot, error in
                                             if error != nil {
-                                                Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "failed"], withCompletionBlock: { (error, ref) in
+                                                Database.database().reference().child("users").child("\(uid)").child("\(appID)").updateChildValues(["STATE": "failed"], withCompletionBlock: { (error, ref) in
                                                     if error != nil {
                                                         //success = 0
-                                                        group.leave()
                                                     }
                                                 })
                                             }
@@ -210,14 +204,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                                             return
                                                         }
                                                         
-                                                        self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType, group: group)
+                                                        self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
 
                                                     }
                                                     else {
-                                                        Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "failed"], withCompletionBlock: { (error, ref) in
+                                                        Database.database().reference().child("users").child("\(uid)").child("\(appID)").updateChildValues(["STATE": "failed"], withCompletionBlock: { (error, ref) in
                                                             if error != nil {
                                                                 //success = 0
-                                                                group.leave()
                                                             }
                                                         })
                                                     }
@@ -230,9 +223,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         }
                     }
                 }
-                group.notify(queue: .global(), execute: {
-                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "succeeded"])
-                })
             }
             else {
                 // ??
@@ -241,7 +231,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 
     
-    func saveRecordCounts(records: [CKRecord], uid: String, appID: Int, recordType: String, group: DispatchGroup) {
+    func saveRecordCounts(records: [CKRecord], uid: String, appID: Int, recordType: String) {
 
         var dateToCountDict = [String:Int]()
         
@@ -262,29 +252,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         
         // now the dictionary is populated; add to firebase db
+        let dictSize = dateToCountDict.count
+        var i = 0
         for (date, count) in dateToCountDict {
-            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("\(date)").setValue([recordType: "\(count)"], withCompletionBlock: { (error, ref) in
+            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("\(date)").updateChildValues([recordType: "\(count)"], withCompletionBlock: { (error, ref) in
                 if error == nil {
                     // record LAST_CHECK
                     let date = Date()
                     let formatter = DateFormatter()
                     formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
                     let formattedDate = formatter.string(from: date)
-                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["LAST_CHECK": formattedDate], withCompletionBlock: { (error, ref) in
+                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").updateChildValues(["LAST_CHECK": formattedDate], withCompletionBlock: { (error, ref) in
                         if error != nil {
                             //success = 0
-                            group.leave()
                         }
                         else {
-                            group.leave()
+                            i = i + 1
+                            if i == dictSize - 1 { // last one
+                                Database.database().reference().child("users").child("\(uid)").child("\(appID)").updateChildValues(["STATE": "succeeded"], withCompletionBlock: { (error, ref) in
+                                    if error == nil {
+                                        // ?
+                                    }
+                                    else {
+                                       // ?
+                                    }
+                                })
+                            }
                         }
                     }) // today // TODO does this work????
                 }
                 else {
-                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").setValue(["STATE": "failed"], withCompletionBlock: { (error, ref) in
+                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").updateChildValues(["STATE": "failed"], withCompletionBlock: { (error, ref) in
                         if error != nil {
                             //success = 0
-                            group.leave()
                         }
                     })
                 }
@@ -292,22 +292,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
     }
 }
-
-//let path = "users/\(uid)/\(appID)/\(formattedDate)"
-//Database.database().reference().child(path).observeSingleEvent(of: .value) { snapshot, error in
-//    var newCount: Int
-//    let recordTypeToCountDict = snapshot.value as? [String:Any]? // record type : number
-//    if recordTypeToCountDict == nil || recordTypeToCountDict!?[recordType] == nil {
-//        newCount = 1
-//    }
-//    else {
-//        guard let oldCount = (recordTypeToCountDict!?[recordType] as? NSString)?.integerValue else {
-//            return
-//        }
-//        newCount = oldCount + 1
-//
-//    }
-//    Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("\(formattedDate)").setValue([recordType: "\(newCount)"])
-//
-//}
 

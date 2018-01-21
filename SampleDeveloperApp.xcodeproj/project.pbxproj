@@ -78,6 +78,9 @@
 		E14CB2011F77591700F8C23F /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		E1731EE12011A45D0080646C /* CKTrendsUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKTrendsUtilities.swift; sourceTree = "<group>"; };
 		E1B9C3ED2014063700B596AF /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1B9C3EF2014258700B596AF /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1B9C3F12014259200B596AF /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1B9C3F32014259B00B596AF /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBE9F5893BB2C2FBF78C8AF6 /* Pods-SampleDeveloperApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleDeveloperApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-SampleDeveloperApp/Pods-SampleDeveloperApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -172,6 +175,9 @@
 		E14CB2001F77591700F8C23F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E1B9C3F32014259B00B596AF /* PromiseKit.framework */,
+				E1B9C3F12014259200B596AF /* PromiseKit.framework */,
+				E1B9C3EF2014258700B596AF /* PromiseKit.framework */,
 				E1B9C3ED2014063700B596AF /* PromiseKit.framework */,
 				E14CB2011F77591700F8C23F /* CloudKit.framework */,
 				8A31552F6CC49FE3FF26C3B8 /* Pods_SampleDeveloperApp.framework */,

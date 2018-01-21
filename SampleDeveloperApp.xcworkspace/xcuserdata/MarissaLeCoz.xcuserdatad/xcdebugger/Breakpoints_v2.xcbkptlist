@@ -10,43 +10,43 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "538178562.431258"
+            timestampString = "538194834.258065"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "217"
-            endingLineNumber = "217"
-            landmarkName = "updateCKTrends(uid:)"
+            startingLineNumber = "286"
+            endingLineNumber = "286"
+            landmarkName = "saveRecordCounts(records:uid:appID:recordType:)"
             landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "SampleDeveloperApp.AppDelegate.updateCKTrends(uid: Swift.String) -&gt; ()"
+                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Error&gt;, __ObjC.DatabaseReference) -&gt; () in SampleDeveloperApp.AppDelegate.saveRecordCounts(records: Swift.Array&lt;__ObjC.CKRecord&gt;, uid: Swift.String, appID: Swift.Int, recordType: Swift.String) -&gt; ()"
                   moduleName = "SampleDeveloperApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/MarissaLeCoz/Documents/xCode/SampleDeveloperApp/SampleDeveloperApp/AppDelegate.swift"
-                  timestampString = "538176091.776245"
+                  timestampString = "538194834.376614"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "216"
-                  endingLineNumber = "216"
-                  offsetFromSymbolStart = "140">
+                  startingLineNumber = "286"
+                  endingLineNumber = "286"
+                  offsetFromSymbolStart = "1824">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Error&gt;, __ObjC.DatabaseReference) -&gt; () in SampleDeveloperApp.AppDelegate.updateCKTrends(uid: Swift.String) -&gt; ()"
+                  symbolName = "closure #2 (Swift.Optional&lt;Swift.Error&gt;, __ObjC.DatabaseReference) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Error&gt;, __ObjC.DatabaseReference) -&gt; () in SampleDeveloperApp.AppDelegate.saveRecordCounts(records: Swift.Array&lt;__ObjC.CKRecord&gt;, uid: Swift.String, appID: Swift.Int, recordType: Swift.String) -&gt; ()"
                   moduleName = "SampleDeveloperApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/MarissaLeCoz/Documents/xCode/SampleDeveloperApp/SampleDeveloperApp/AppDelegate.swift"
-                  timestampString = "538176091.779017"
+                  timestampString = "538194834.380474"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "218"
-                  endingLineNumber = "218"
-                  offsetFromSymbolStart = "48">
+                  startingLineNumber = "287"
+                  endingLineNumber = "287"
+                  offsetFromSymbolStart = "20">
                </Location>
             </Locations>
          </BreakpointContent>
