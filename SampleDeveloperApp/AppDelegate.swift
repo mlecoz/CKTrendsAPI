@@ -130,25 +130,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         isNewRecordType = true
                     }
                     
-                    // add to tracking (even if already there). It's just easier in terms of asynchronicity
+                    // add this record type to tracking (even if already there). It's just easier in terms of asynchronicity to add it again
                     Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("TRACKING").updateChildValues([recordType: "true"], withCompletionBlock: { (error, ref) in
 
                         if error == nil {
                             
                             // if this is a new record type, query all records of this type
                             if isNewRecordType {
-                                
                                 let predicate = NSPredicate(value: true)
                                 let query = CKQuery(recordType: recordType, predicate: predicate)
                                 self.db.perform(query, inZoneWith: nil) { records, error in
-                                    
                                     if error == nil {
-                                        
                                         guard let records = records else {
                                             return
                                         }
                                         self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
-                                        
                                     }
                                 }
                             }
@@ -158,22 +154,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                             // day. To avoid overriding the count from earlier in the day, we need query for all records created on that day.)
                             else {
                                 
-                                // get the last time this record type was checked and query for everything that day/time and after.
                                 guard let lastCheckAsStr = recordTypeToLastCheckDict!?[recordType] as? String else {
                                     return
                                 }
+                                // get all records from the day of the last check and after
                                 let predicate = NSPredicate(format: "%K >= %@", "creationDate", self.dateFromString(stringDate: lastCheckAsStr)!)
                                 let query = CKQuery(recordType: recordType, predicate: predicate)
-                                
                                 self.db.perform(query, inZoneWith: nil) { records, error in
-                                    
                                     if error == nil {
-                                        
                                         guard let records = records else {
                                             return
                                         }
                                         self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
-
                                     }
                                 }
                             }
@@ -185,39 +177,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func saveRecordCounts(records: [CKRecord], uid: String, appID: Int, recordType: String) {
+        
+        let dateToCountDict = dateToCountDictionary(records: records)
 
-        var dateToCountDict = [String:Int]()
-        
-        for record in records {
-            guard let date = record["creationDate"] as? Date else {
-                return
-            }
-            let formatter = DateFormatter()
-            formatter.dateFormat = "MM-dd-yy"
-            let formattedDate = formatter.string(from: date)
-            
-            if dateToCountDict[formattedDate] != nil {
-                dateToCountDict[formattedDate] = dateToCountDict[formattedDate]! + 1
-            }
-            else {
-                dateToCountDict[formattedDate] = 1
-            }
-        }
-        
         // No new records, then just update the last check time
         if dateToCountDict.count == 0 {
             Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: self.formattedDateForToday()])
         }
         
-        // now the dictionary is populated; add to firebase db
+        // add new record counts to firebase
         for (date, count) in dateToCountDict {
             Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("\(date)").updateChildValues([recordType: "\(count)"], withCompletionBlock: { (error, ref) in
                 if error == nil {
                     // record LAST_CHECK
-                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: self.formattedDateForToday()]) // today // TODO does this work????
+                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: self.formattedDateForToday()])
                 }
             })
         }
+    }
+    
+    func dateToCountDictionary(records: [CKRecord]) -> [String:Int] {
+        
+        var dateToCountDict = [String:Int]()
+        
+        for record in records {
+            if let date = record["creationDate"] as? Date {
+                let formatter = DateFormatter()
+                formatter.dateFormat = "MM-dd-yy"
+                let formattedDate = formatter.string(from: date)
+                
+                if dateToCountDict[formattedDate] != nil {
+                    dateToCountDict[formattedDate] = dateToCountDict[formattedDate]! + 1
+                }
+                else {
+                    dateToCountDict[formattedDate] = 1
+                }
+            }
+        }
+
+        return dateToCountDict
     }
     
     func formattedDateForToday() -> String {
