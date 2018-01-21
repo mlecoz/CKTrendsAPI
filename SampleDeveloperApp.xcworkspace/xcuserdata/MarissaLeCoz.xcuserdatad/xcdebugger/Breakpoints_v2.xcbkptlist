@@ -6,11 +6,11 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "538197198.811088"
+            timestampString = "538200802.86207"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "191"
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "538197438.010491"
+            timestampString = "538200802.862916"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "211"
-            endingLineNumber = "211"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
             landmarkName = "updateCKTrends(uid:)"
             landmarkType = "7">
             <Locations>
@@ -42,11 +42,11 @@
                   moduleName = "SampleDeveloperApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/MarissaLeCoz/Documents/xCode/SampleDeveloperApp/SampleDeveloperApp/AppDelegate.swift"
-                  timestampString = "538197438.022324"
+                  timestampString = "538199180.2502069"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "211"
-                  endingLineNumber = "211"
+                  startingLineNumber = "216"
+                  endingLineNumber = "216"
                   offsetFromSymbolStart = "388">
                </Location>
                <Location
@@ -57,14 +57,30 @@
                   moduleName = "SampleDeveloperApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/MarissaLeCoz/Documents/xCode/SampleDeveloperApp/SampleDeveloperApp/AppDelegate.swift"
-                  timestampString = "538197438.025717"
+                  timestampString = "538199180.2551841"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "212"
-                  endingLineNumber = "212"
+                  startingLineNumber = "217"
+                  endingLineNumber = "217"
                   offsetFromSymbolStart = "20">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SampleDeveloperApp/AppDelegate.swift"
+            timestampString = "538200802.863295"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "199"
+            endingLineNumber = "199"
+            landmarkName = "updateCKTrends(uid:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

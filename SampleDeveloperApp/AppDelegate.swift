@@ -112,7 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func updateCKTrends(uid: String) {
         
         let appID = 1
-        let recordTypesToTrack = ["RecordTypeA"] // add B later
+        let recordTypesToTrack = ["RecordTypeA", "RecordTypeB"] // add B later
         //var success = 1 // means everything is good
         
         Database.database().reference().child("users").child("\(uid)").child("\(appID)").updateChildValues(["STATE": "in_progress"], withCompletionBlock: { (error, ref) in
@@ -192,12 +192,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                                 guard let lastCheckAsStr = recordTypeToLastCheckDict!?[recordType] as? String else {
                                                     return
                                                 }
-                                                var dateFormatter = DateFormatter()
+                                                let dateFormatter = DateFormatter()
                                                 // Our date format needs to match our input string format
-                                                dateFormatter.dateFormat = "yyyy/MM/dd hh:mm:ss"
-                                                let date = dateFormatter.date(from: lastCheckAsStr)
+                                                dateFormatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
+                                                dateFormatter.timeZone = TimeZone.current
+                                                let date = dateFormatter.date(from: lastCheckAsStr) as NSDate?
                                                 
-                                                let predicate = NSPredicate(format: "%K > %@", "creationDate", date) // TODO does this work??? - no
+                                                let predicate = NSPredicate(format: "%K > %@", "creationDate", date!) // TODO does this work??? - no
                                                 let query = CKQuery(recordType: recordType, predicate: predicate)
                                                 
                                                 self.db.perform(query, inZoneWith: nil) { records, error in
@@ -253,6 +254,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             else {
                 dateToCountDict[formattedDate] = 1
             }
+        }
+        
+        if dateToCountDict.count == 0 {
+            // TODO also record last check
+            Database.database().reference().child("users").child("\(uid)").child("\(appID)").updateChildValues(["STATE": "succeeded"], withCompletionBlock: { (error, ref) in
+                if error == nil {
+                    // ?
+                }
+                else {
+                    // ?
+                }
+            })
         }
         
         // now the dictionary is populated; add to firebase db
