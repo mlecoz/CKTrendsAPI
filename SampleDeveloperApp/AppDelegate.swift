@@ -154,13 +154,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                             }
                                 
                             // if this isn't a new record type, query all record since the last time this type was tracked
+                            // edge case: include that day itself. (Suppose that the user checked midday, and now they check again later in the
+                            // day. To avoid overriding the count from earlier in the day, we need query for all records created on that day.)
                             else {
                                 
                                 // get the last time this record type was checked and query for everything that day/time and after.
                                 guard let lastCheckAsStr = recordTypeToLastCheckDict!?[recordType] as? String else {
                                     return
                                 }
-                                let predicate = NSPredicate(format: "%K > %@", "creationDate", self.dateFromString(stringDate: lastCheckAsStr)!)
+                                let predicate = NSPredicate(format: "%K >= %@", "creationDate", self.dateFromString(stringDate: lastCheckAsStr)!)
                                 let query = CKQuery(recordType: recordType, predicate: predicate)
                                 
                                 self.db.perform(query, inZoneWith: nil) { records, error in
@@ -170,12 +172,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                         guard let records = records else {
                                             return
                                         }
-                                        
                                         self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
 
                                     }
                                 }
-                                
                             }
                         }
                     })
@@ -228,10 +228,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func dateFromString(stringDate: String) -> NSDate? {
+        
+        let cal = Calendar(identifier: .gregorian)
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
         dateFormatter.timeZone = TimeZone.current
-        return dateFormatter.date(from: stringDate) as NSDate?
+        var date = dateFormatter.date(from: stringDate)
+        
+        // set to the beginning of the day
+        var components = cal.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date!)
+        components.hour = 0
+        components.minute = 0
+        components.second = 0
+        
+        date = cal.date(from: components)!
+        
+        return date as NSDate?
     }
 }
 
