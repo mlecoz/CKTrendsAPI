@@ -122,7 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 for recordType in recordTypesToTrack {
                     
                     // check to see whether the user has tracked this app before; if not, add it to tracking list
-                    let pathString = "users/\(uid)/\(appID)/TRACKING"
+                    let pathString = "users/\(uid)/\(appID)/LAST_CHECK"
                     Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
                         
                         if error != nil {
@@ -176,7 +176,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                     // if this isn't a new record type, query all record since the last time this type was tracked
                                     else {
                                         
-                                        let lastCheckPath = "users/\(uid)/\(appID)/LAST_CHECK/\(recordType)"
+                                        let lastCheckPath = "users/\(uid)/\(appID)/LAST_CHECK/"
                                         Database.database().reference().child(lastCheckPath).observeSingleEvent(of: .value) { snapshot, error in
                                             if error != nil {
                                                 Database.database().reference().child("users").child("\(uid)").child("\(appID)").updateChildValues(["STATE": "failed"], withCompletionBlock: { (error, ref) in
@@ -189,11 +189,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                             else {
                                                 
                                                 let recordTypeToLastCheckDict = snapshot.value as? [String:Any]?
-                                                guard let lastCheck = recordTypeToLastCheckDict!?[recordType] as? Date else {
+                                                guard let lastCheckAsStr = recordTypeToLastCheckDict!?[recordType] as? String else {
                                                     return
                                                 }
+                                                var dateFormatter = DateFormatter()
+                                                // Our date format needs to match our input string format
+                                                dateFormatter.dateFormat = "yyyy/MM/dd hh:mm:ss"
+                                                let date = dateFormatter.date(from: lastCheckAsStr)
                                                 
-                                                let predicate = NSPredicate(format: "%K > %@", "creationDate", lastCheck as CVarArg) // TODO does this work???
+                                                let predicate = NSPredicate(format: "%K > %@", "creationDate", date) // TODO does this work??? - no
                                                 let query = CKQuery(recordType: recordType, predicate: predicate)
                                                 
                                                 self.db.perform(query, inZoneWith: nil) { records, error in
@@ -262,7 +266,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     let formatter = DateFormatter()
                     formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
                     let formattedDate = formatter.string(from: date)
-                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").updateChildValues(["LAST_CHECK": formattedDate], withCompletionBlock: { (error, ref) in
+                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: formattedDate], withCompletionBlock: { (error, ref) in
                         if error != nil {
                             //success = 0
                         }
