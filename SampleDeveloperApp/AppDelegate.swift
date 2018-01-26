@@ -131,9 +131,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     let pathString = "users/\(uid)/\(appID)/LAST_CHECK"
                     Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
                 
-                        let recordTypeToLastCheckDict = snapshot.value as? [String:Any]? // record type : last check date
-                
                         if error == nil {
+                            
+                            let recordTypeToLastCheckDict = snapshot.value as? [String:Any]? // record type : last check date
                     
                             var isNewRecordType = false // default
                             if recordTypeToLastCheckDict == nil || recordTypeToLastCheckDict!?[recordType] == nil {

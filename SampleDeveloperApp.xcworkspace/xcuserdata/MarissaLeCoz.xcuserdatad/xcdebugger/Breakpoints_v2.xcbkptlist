@@ -10,13 +10,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "538207152.9663039"
+            timestampString = "538640552.182847"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "166"
             endingLineNumber = "166"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "updateCKTrends(uid:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -26,13 +26,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "538207152.967018"
+            timestampString = "538640552.183269"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "167"
             endingLineNumber = "167"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "updateCKTrends(uid:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
