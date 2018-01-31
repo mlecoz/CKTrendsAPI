@@ -144,12 +144,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                             if isNewRecordType {
                                 let predicate = NSPredicate(value: true)
                                 let query = CKQuery(recordType: recordType, predicate: predicate)
+                                let sort = NSSortDescriptor(key: "creationDate", ascending: true) // so the 0th result is the earliest
+                                query.sortDescriptors = [sort]
                                 self.db.perform(query, inZoneWith: nil) { records, error in
                                     if error == nil {
                                         guard let records = records else {
                                             return
                                         }
-                                        self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
+                                        self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType, isFirstCheck: true)
                                     }
                                 }
                             }
@@ -170,7 +172,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                         guard let records = records else {
                                             return
                                         }
-                                        self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType)
+                                        self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType, isFirstCheck: false)
                                     }
                                 }
                             }
@@ -181,24 +183,62 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         })
     }
     
-    func saveRecordCounts(records: [CKRecord], uid: String, appID: Int, recordType: String) {
+    func saveRecordCounts(records: [CKRecord], uid: String, appID: Int, recordType: String, isFirstCheck: Bool) {
         
         let dateToCountDict = dateToCountDictionary(records: records)
+        
+        // if it's the first time checking, record the earliest date
+        if isFirstCheck {
+            guard let date = records[0].creationDate else { return }
+            let dateStr = stringFromDate(date: date)
+            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("EARLIEST_DATE").updateChildValues([recordType: dateStr])
+        }
 
         // No new records, then just update the last check time
         if dateToCountDict.count == 0 {
             Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: self.formattedDateForToday()])
         }
         
-        // add new record counts to firebase
-        for (date, count) in dateToCountDict {
-            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("\(date)").updateChildValues([recordType: "\(count)"], withCompletionBlock: { (error, ref) in
-                if error == nil {
-                    // record LAST_CHECK
-                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: self.formattedDateForToday()])
+        // get previous max count, if it exists
+        let appID = 1
+        let pathString = "users/\(uid)/\(appID)/MAX_COUNT"
+        Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
+            
+            if error == nil {
+                
+                let recordTypeToMaxCountDict = snapshot.value as? [String:Any]?
+                
+                var maxCount: Double
+                
+                // this path doesn't exist yet
+                if recordTypeToMaxCountDict == nil || recordTypeToMaxCountDict!?[recordType] == nil {
+                    maxCount = -Double.infinity
                 }
-            })
+                else {
+                    maxCount = recordTypeToMaxCountDict!?[recordType] as! Double
+                }
+                
+                // add new record counts to firebase and keep track of the max count
+                for (date, count) in dateToCountDict {
+                    if Double(count) > maxCount {
+                        maxCount = Double(count)
+                    }
+                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("\(date)").updateChildValues([recordType: "\(count)"], withCompletionBlock: { (error, ref) in
+                        if error == nil {
+                            // record LAST_CHECK
+                            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: self.formattedDateForToday()])
+                        }
+                    })
+                }
+                
+                Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("MAX_COUNT").updateChildValues([recordType: String(maxCount)])
+                
+            }
         }
+        
+        //Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("EARLIEST_DATE").updateChildValues([recordType: dateStr])
+        
+        
     }
     
     func dateToCountDictionary(records: [CKRecord]) -> [String:Int] {
@@ -227,6 +267,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let date = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
+        return formatter.string(from: date)
+    }
+    
+    func stringFromDate(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd"
         return formatter.string(from: date)
     }
     
