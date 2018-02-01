@@ -216,7 +216,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     maxCount = -Double.infinity
                 }
                 else {
-                    maxCount = recordTypeToMaxCountDict!?[recordType] as! Double
+                    guard let count = Double(recordTypeToMaxCountDict!?[recordType] as! String) else { return }
+                    maxCount = count
                 }
                 
                 // add new record counts to firebase and keep track of the max count as we go
