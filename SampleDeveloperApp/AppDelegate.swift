@@ -153,6 +153,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                         }
                                         self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType, isFirstCheck: true)
                                     }
+                                    // error 12 indicates that the record type is not sortable (or queryable?)
                                 }
                             }
                                 
@@ -208,8 +209,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 
                 let recordTypeToMaxCountDict = snapshot.value as? [String:Any]?
                 
+                // set the current max count (or else initialize to -Inf)
                 var maxCount: Double
-                
                 // this path doesn't exist yet
                 if recordTypeToMaxCountDict == nil || recordTypeToMaxCountDict!?[recordType] == nil {
                     maxCount = -Double.infinity
@@ -218,7 +219,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     maxCount = recordTypeToMaxCountDict!?[recordType] as! Double
                 }
                 
-                // add new record counts to firebase and keep track of the max count
+                // add new record counts to firebase and keep track of the max count as we go
                 for (date, count) in dateToCountDict {
                     if Double(count) > maxCount {
                         maxCount = Double(count)
@@ -231,6 +232,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     })
                 }
                 
+                // Save the max count
                 Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("MAX_COUNT").updateChildValues([recordType: String(maxCount)])
                 
             }
