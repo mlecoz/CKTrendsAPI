@@ -113,7 +113,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func updateCKTrends(uid: String) {
         
         let appID = 1
-        let recordTypesToTrack = ["RecordTypeA", "RecordTypeB"] // add B later
+        let recordTypesToTrack = ["Blah1", "Users", "Blah", "RecordTypeA", "RecordTypeB"] // add B later
         
         var recordTypesDict = [String:String]()
         for type in recordTypesToTrack {
@@ -128,7 +128,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 for recordType in recordTypesToTrack {
             
                     // check to see whether the user has checked this record type before; if not, add it to tracking list
-                    let pathString = "users/\(uid)/\(appID)/LAST_CHECK"
+                    var pathString = "users/\(uid)/\(appID)/LAST_CHECK"
                     Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
                 
                         if error == nil {
@@ -153,7 +153,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                         }
                                         self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType, isFirstCheck: true)
                                     }
+                                    else {
+                                        // 10 - system defined record type
+                                        // 11 - record type not found
+                                        if (error as! CKError).errorCode == 10 || (error as! CKError).errorCode == 11 {
+                                            pathString = "users/\(uid)/\(appID)/TRACKING/\(recordType)"
+                                            Database.database().reference().child(pathString).removeValue() // shoudn't be tracking this
+                                        }
+                                    }
                                     // error 12 indicates that the record type is not sortable (or queryable?)
+                                    // error 10 - can't query system types
                                 }
                             }
                                 
@@ -174,6 +183,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                             return
                                         }
                                         self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType, isFirstCheck: false)
+                                    }
+                                    else {
+                                        // 10 - system defined record type
+                                        // 11 - record type not found
+                                        if (error as! CKError).errorCode == 10 || (error as! CKError).errorCode == 11 {
+                                            pathString = "users/\(uid)/\(appID)/TRACKING/\(recordType)"
+                                            Database.database().reference().child(pathString).removeValue() // shoudn't be tracking this
+                                        }
                                     }
                                 }
                             }
