@@ -160,10 +160,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                             pathString = "users/\(uid)/\(appID)/TRACKING/\(recordType)"
                                             // shouldn't be tracking this
                                             Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
-                                                guard let vc = self.window?.rootViewController else {
-                                                    return
+                                                if error != nil {
+                                                    guard let vc = self.window?.rootViewController else {
+                                                        return
+                                                    }
+                                                    CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                                                 }
-                                                CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                                             })
                                         }
                                     }
@@ -197,10 +199,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                             pathString = "users/\(uid)/\(appID)/TRACKING/\(recordType)"
                                             // shoudn't be tracking this
                                             Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
-                                                guard let vc = self.window?.rootViewController else {
-                                                    return
+                                                if error != nil {
+                                                    guard let vc = self.window?.rootViewController else {
+                                                        return
+                                                    }
+                                                    CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                                                 }
-                                                CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                                             })
                                         }
                                     }
@@ -234,20 +238,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             guard let date = records[0].creationDate else { return }
             let dateStr = stringFromDate(date: date)
             Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("EARLIEST_DATE").updateChildValues([recordType: dateStr], withCompletionBlock: { (error, ref) in
-                guard let vc = self.window?.rootViewController else {
-                    return
+                if error != nil {
+                    guard let vc = self.window?.rootViewController else {
+                        return
+                    }
+                    CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                 }
-                CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
             })
         }
 
         // No new records, then just update the last check time
         if dateToCountDict.count == 0 {
             Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: self.formattedDateForToday()], withCompletionBlock: { (error, ref) in
-                guard let vc = self.window?.rootViewController else {
-                    return
+                if error != nil {
+                    guard let vc = self.window?.rootViewController else {
+                        return
+                    }
+                    CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                 }
-                CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
             })
         }
         
@@ -294,10 +302,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 
                 // Save the max count
                 Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("MAX_COUNT").updateChildValues([recordType: String(maxCount)], withCompletionBlock: { (error, ref) in
-                    guard let vc = self.window?.rootViewController else {
-                        return
+                    if error != nil {
+                        guard let vc = self.window?.rootViewController else {
+                            return
+                        }
+                        CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                     }
-                    CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                 })
                 
             }
