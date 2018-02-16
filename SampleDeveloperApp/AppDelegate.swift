@@ -168,6 +168,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                                 }
                                             })
                                         }
+                                        else if (error as! CKError).errorCode == 12 {
+                                            guard let vc = self.window?.rootViewController else {
+                                                return
+                                            }
+                                            CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Make sure that the Record Types you wish to track have a queryable recordName and a sortable createdAt. (See API documentation for help.)", vc: vc)
+                                        }
                                     }
                                     // error 12 indicates that the record type is not sortable (or queryable?)
                                     // error 10 - can't query system types
@@ -206,6 +212,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                                     CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                                                 }
                                             })
+                                        }
+                                        else if (error as! CKError).errorCode == 12 {
+                                            guard let vc = self.window?.rootViewController else {
+                                                return
+                                            }
+                                            CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Make sure that the Record Types you wish to track have a queryable recordName and a sortable createdAt. (See API documentation for help.)", vc: vc)
                                         }
                                     }
                                 }
