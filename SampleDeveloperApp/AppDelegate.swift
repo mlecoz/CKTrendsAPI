@@ -172,7 +172,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                             guard let vc = self.window?.rootViewController else {
                                                 return
                                             }
-                                            CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Make sure that the Record Types you wish to track have a queryable recordName and a sortable createdAt. (See API documentation for help.)", vc: vc)
+                                            CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Make sure that the Record Types you wish to track have a queryable recordName and a queryable & sortable createdAt. (See API documentation for help.)", vc: vc)
                                         }
                                     }
                                     // error 12 indicates that the record type is not sortable (or queryable?)
@@ -217,7 +217,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                             guard let vc = self.window?.rootViewController else {
                                                 return
                                             }
-                                            CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Make sure that the Record Types you wish to track have a queryable recordName and a sortable createdAt. (See API documentation for help.)", vc: vc)
+                                            CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Make sure that the Record Types you wish to track have a queryable recordName and a queryable & sortable createdAt. (See API documentation for help.)", vc: vc)
                                         }
                                     }
                                 }
