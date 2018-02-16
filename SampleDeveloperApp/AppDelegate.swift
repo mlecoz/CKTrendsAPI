@@ -308,10 +308,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
             }
         }
-        
-        //Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("EARLIEST_DATE").updateChildValues([recordType: dateStr])
-        
-        
     }
     
     func dateToCountDictionary(records: [CKRecord]) -> [String:Int] {
