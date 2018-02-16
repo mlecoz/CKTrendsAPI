@@ -112,7 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func updateCKTrends(uid: String) {
         
-        let appID = 1
+        let appID = "1"
         let recordTypesToTrack = ["Blah1", "Users", "Blah", "RecordTypeA", "RecordTypeB"] // add B later
         
         var recordTypesDict = [String:String]()
@@ -158,7 +158,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                         // 11 - record type not found
                                         if (error as! CKError).errorCode == 10 || (error as! CKError).errorCode == 11 {
                                             pathString = "users/\(uid)/\(appID)/TRACKING/\(recordType)"
-                                            Database.database().reference().child(pathString).removeValue() // shoudn't be tracking this
+                                            // shouldn't be tracking this
+                                            Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
+                                                guard let vc = self.window?.rootViewController else {
+                                                    return
+                                                }
+                                                CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
+                                            })
                                         }
                                     }
                                     // error 12 indicates that the record type is not sortable (or queryable?)
@@ -189,19 +195,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                         // 11 - record type not found
                                         if (error as! CKError).errorCode == 10 || (error as! CKError).errorCode == 11 {
                                             pathString = "users/\(uid)/\(appID)/TRACKING/\(recordType)"
-                                            Database.database().reference().child(pathString).removeValue() // shoudn't be tracking this
+                                            // shoudn't be tracking this
+                                            Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
+                                                guard let vc = self.window?.rootViewController else {
+                                                    return
+                                                }
+                                                CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
+                                            })
                                         }
                                     }
                                 }
                             }
                         }
+                        else {
+                            guard let vc = self.window?.rootViewController else {
+                                return
+                            }
+                            CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
+                        }
                     }
                 }
+            }
+            else {
+                guard let vc = self.window?.rootViewController else {
+                    return
+                }
+                CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
             }
         })
     }
     
-    func saveRecordCounts(records: [CKRecord], uid: String, appID: Int, recordType: String, isFirstCheck: Bool) {
+    func saveRecordCounts(records: [CKRecord], uid: String, appID: String, recordType: String, isFirstCheck: Bool) {
         
         let dateToCountDict = dateToCountDictionary(records: records)
         
@@ -209,16 +233,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         if isFirstCheck {
             guard let date = records[0].creationDate else { return }
             let dateStr = stringFromDate(date: date)
-            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("EARLIEST_DATE").updateChildValues([recordType: dateStr])
+            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("EARLIEST_DATE").updateChildValues([recordType: dateStr], withCompletionBlock: { (error, ref) in
+                guard let vc = self.window?.rootViewController else {
+                    return
+                }
+                CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
+            })
         }
 
         // No new records, then just update the last check time
         if dateToCountDict.count == 0 {
-            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: self.formattedDateForToday()])
+            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: self.formattedDateForToday()], withCompletionBlock: { (error, ref) in
+                guard let vc = self.window?.rootViewController else {
+                    return
+                }
+                CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
+            })
         }
         
         // get previous max count, if it exists
-        let appID = 1
+        let appID = "1"
         let pathString = "users/\(uid)/\(appID)/MAX_COUNT"
         Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
             
@@ -247,12 +281,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                             // record LAST_CHECK
                             Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: self.formattedDateForToday()])
                         }
+                        else {
+                            
+                            guard let vc = self.window?.rootViewController else {
+                                return
+                            }
+                            CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
+                      
+                        }
                     })
                 }
                 
                 // Save the max count
-                Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("MAX_COUNT").updateChildValues([recordType: String(maxCount)])
+                Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("MAX_COUNT").updateChildValues([recordType: String(maxCount)], withCompletionBlock: { (error, ref) in
+                    guard let vc = self.window?.rootViewController else {
+                        return
+                    }
+                    CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
+                })
                 
+            }
+            else {
+                guard let vc = self.window?.rootViewController else {
+                    return
+                }
+                CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
             }
         }
         
