@@ -238,67 +238,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 
                 // go through lists to track [recordType, list, recordType, list...]
                 for i in stride(from: 0, through: listsToTrack.count, by: 2) {
-                    
-                    // check to see whether the user has checked this record type before; if not, add it to tracking list
-                    var pathString = "users/\(uid)/\(appID)/LAST_CHECK"
-                    Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
-                        
+                            
+                    let predicate = NSPredicate(value: true)
+                    let query = CKQuery(recordType: listsToTrack[i], predicate: predicate) // ith element is the record that has the list to track
+                    self.db.perform(query, inZoneWith: nil) { records, error in
                         if error == nil {
-                            
-                            let recordTypeToLastCheckDict = snapshot.value as? [String:Any]? // record type : last check date
-                            
-                            var isNewRecordType = false // default
-                            if recordTypeToLastCheckDict == nil || recordTypeToLastCheckDict!?["\(listsToTrack[i])/\(listsToTrack[i+1])"] == nil {
-                                isNewRecordType = true
-                            }
-                            
-                            // if this is a new record type, query all records of this type
-                            if isNewRecordType { // get rid of this too
-                                let predicate = NSPredicate(value: true)
-                                let query = CKQuery(recordType: listsToTrack[i], predicate: predicate)
-                                let sort = NSSortDescriptor(key: "creationDate", ascending: true) // so the 0th result is the earliest
-                                query.sortDescriptors = [sort]
-                                self.db.perform(query, inZoneWith: nil) { records, error in
-                                    if error == nil {
-                                        guard let records = records else {
-                                            return
-                                        }
-                                        self.saveListCount(record: records[0], uid: uid, appID: appID, recordType: "\(listsToTrack[i])/\(listsToTrack[i+1])", isFirstCheck: true)
-                                    }
-                                    else {
-                                        // 10 - system defined record type
-                                        // 11 - record type not found
-                                        if (error as! CKError).errorCode == 10 || (error as! CKError).errorCode == 11 {
-                                            pathString = "users/\(uid)/\(appID)/TRACKING/\("\(listsToTrack[i])/\(listsToTrack[i+1])")"
-                                            // shouldn't be tracking this
-                                            Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
-                                                if error != nil {
-                                                    guard let vc = self.window?.rootViewController else {
-                                                        return
-                                                    }
-                                                    CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
-                                                }
-                                            })
-                                        }
-                                        else if (error as! CKError).errorCode == 12 {
-                                            guard let vc = self.window?.rootViewController else {
-                                                return
-                                            }
-                                            CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Make sure that the Record Types you wish to track have a queryable recordName and a queryable & sortable createdAt. (See API documentation for help.)", vc: vc)
-                                        }
-                                    }
-                                    // error 12 indicates that the record type is not sortable (or queryable?)
-                                    // error 10 - can't query system types
-                                }
-                            }
-                        }
-                        else {
-                            guard let vc = self.window?.rootViewController else {
+                            guard let records = records else {
                                 return
                             }
-                            CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
+                            self.saveListCount(record: records[0], uid: uid, appID: appID, recordType: listsToTrack[i], listName: listsToTrack[i+1], isFirstCheck: true)
                         }
+                        else {
+                            // 10 - system defined record type
+                            // 11 - record type not found
+                            if (error as! CKError).errorCode == 10 || (error as! CKError).errorCode == 11 {
+                                let pathString = "users/\(uid)/\(appID)/TRACKING/\("\(listsToTrack[i])/\(listsToTrack[i+1])")"
+                                // shouldn't be tracking this
+                                Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
+                                    if error != nil {
+                                        guard let vc = self.window?.rootViewController else {
+                                            return
+                                        }
+                                        CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
+                                    }
+                                })
+                            }
+                            else if (error as! CKError).errorCode == 12 {
+                                guard let vc = self.window?.rootViewController else {
+                                    return
+                                }
+                                CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Make sure that the Record Types you wish to track have a queryable recordName and a queryable & sortable createdAt. (See API documentation for help.)", vc: vc)
+                            }
+                        }
+                        // error 12 indicates that the record type is not sortable (or queryable?)
+                        // error 10 - can't query system types
                     }
+
                 }
                 
             }
@@ -372,7 +347,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("\(date)").updateChildValues([recordType: "\(count)"], withCompletionBlock: { (error, ref) in
                         if error == nil {
                             // record LAST_CHECK
-                            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: self.formattedDateForToday()])
+                            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: self.formattedDateForToday()], withCompletionBlock : { (error2, ref) in
+                                if error2 != nil {
+                                    guard let vc = self.window?.rootViewController else {
+                                        return
+                                    }
+                                    CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
+                                }
+                            })
                         }
                         else {
                             
@@ -405,87 +387,81 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
     }
     
-    func saveListCount(record: CKRecord, uid: String, appID: String, recordType: String, isFirstCheck: Bool) {
+    func saveListCount(record: CKRecord, uid: String, appID: String, recordType: String, listName: String, isFirstCheck: Bool) {
         
-        let dateToCountDict = dateToCountDictionary(records: records)
+        var count: Int?
         
-        // if it's the first time checking, record the earliest date
-        if isFirstCheck {
-            guard let date = records[0].creationDate else { return }
-            let dateStr = stringFromDate(date: date)
-            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("EARLIEST_DATE").updateChildValues([recordType: dateStr], withCompletionBlock: { (error, ref) in
+        if record.object(forKey: listName) == nil {
+            let pathString = "users/\(uid)/\(appID)/TRACKING/\("\(recordType)/\(listName)")"
+            // shouldn't be tracking this
+            Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
                 if error != nil {
                     guard let vc = self.window?.rootViewController else {
                         return
                     }
                     CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
+                    return
                 }
             })
         }
-        
-        // No new records, then just update the last check time
-        if dateToCountDict.count == 0 {
-            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: self.formattedDateForToday()], withCompletionBlock: { (error, ref) in
-                if error != nil {
-                    guard let vc = self.window?.rootViewController else {
-                        return
-                    }
-                    CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
-                }
-            })
+        // get current total
+        else {
+            let list = record.object(forKey: listName) as! NSArray
+            count = list.count
         }
         
-        // get previous max count, if it exists
+        // get previous total, if it exists
         let appID = "1"
-        let pathString = "users/\(uid)/\(appID)/MAX_COUNT"
-        Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
+        let pathString = "users/\(uid)/\(appID)/TOTALS"
+        Database.database().reference().child(pathString).observeSingleEvent(of: .value) { [count] snapshot, error in
             
             if error == nil {
                 
-                let recordTypeToMaxCountDict = snapshot.value as? [String:Any]?
+                let recordTypeToTotalsDict = snapshot.value as? [String:Any]?
+                var oldCount: Int
                 
-                // set the current max count (or else initialize to -Inf)
-                var maxCount: Double
                 // this path doesn't exist yet
-                if recordTypeToMaxCountDict == nil || recordTypeToMaxCountDict!?[recordType] == nil {
-                    maxCount = -Double.infinity
+                if recordTypeToTotalsDict == nil || recordTypeToTotalsDict!?["\(recordType)/\(listName)"] == nil {
+                    oldCount = 0
                 }
                 else {
-                    guard let count = Double(recordTypeToMaxCountDict!?[recordType] as! String) else { return }
-                    maxCount = count
+                    guard let oldListCount = Int(recordTypeToTotalsDict!?["\(recordType)/\(listName)"] as! String) else { return }
+                    oldCount = oldListCount
                 }
                 
-                // add new record counts to firebase and keep track of the max count as we go
-                for (date, count) in dateToCountDict {
-                    if Double(count) > maxCount {
-                        maxCount = Double(count)
-                    }
-                    Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("\(date)").updateChildValues([recordType: "\(count)"], withCompletionBlock: { (error, ref) in
-                        if error == nil {
-                            // record LAST_CHECK
-                            Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: self.formattedDateForToday()])
-                        }
-                        else {
-                            
-                            guard let vc = self.window?.rootViewController else {
-                                return
+                // update total
+                Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("TOTALS").updateChildValues(["\(recordType)/\(listName)": "\(count!)"], withCompletionBlock: { (error, ref) in
+                    if error == nil {
+                        // record LAST_CHECK
+                        Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues(["\(recordType)/\(listName)": self.formattedDateForToday()], withCompletionBlock : { (error2, ref) in
+                            if error2 == nil {
+                                // save the delta from the last time
+                                Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("DELTAS").updateChildValues(["\(recordType)/\(listName)": count! - oldCount], withCompletionBlock : { (error3, ref) in
+                                    if error3 != nil {
+                                        guard let vc = self.window?.rootViewController else {
+                                            return
+                                        }
+                                        CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
+                                    }
+                                })
                             }
-                            CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
-                            
-                        }
-                    })
-                }
-                
-                // Save the max count
-                Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("MAX_COUNT").updateChildValues([recordType: String(maxCount)], withCompletionBlock: { (error, ref) in
-                    if error != nil {
+                            else {
+                                guard let vc = self.window?.rootViewController else {
+                                    return
+                                }
+                                CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
+                            }
+                        })
+                    }
+                    else {
+                        
                         guard let vc = self.window?.rootViewController else {
                             return
                         }
                         CKTrendsUtilities.presentAlert(title: "Uh Oh!", message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
+                        
                     }
                 })
-                
             }
             else {
                 guard let vc = self.window?.rootViewController else {
