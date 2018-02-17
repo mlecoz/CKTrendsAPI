@@ -120,8 +120,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         for type in recordTypesToTrack {
             recordTypesDict[type] = "true"
         }
-        for i in stride(from: 0, through: listsToTrack.count, by: 2) {
-            recordTypesDict["\(listsToTrack[i])/\(listsToTrack[i+1])"] = "true" // represent lists to track as RecordType/listName (slashes aren't allowed in CloudKit RecordType names, so there shouldn't be a conflict
+        for i in stride(from: 0, through: listsToTrack.count-1, by: 2) {
+            recordTypesDict["\(listsToTrack[i])~\(listsToTrack[i+1])"] = "true" // represent lists to track as RecordType~listName (tildes aren't allowed in CloudKit RecordType names, so there shouldn't be a conflict; tildes are allowed in Firebase, which is necessary)
         }
         
         // "set" overrides everything in that path, which is what we want, like if the user decided to stop tracking a record type
@@ -237,7 +237,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 }
                 
                 // go through lists to track [recordType, list, recordType, list...]
-                for i in stride(from: 0, through: listsToTrack.count, by: 2) {
+                for i in stride(from: 0, through: listsToTrack.count-1, by: 2) {
                             
                     let predicate = NSPredicate(value: true)
                     let query = CKQuery(recordType: listsToTrack[i], predicate: predicate) // ith element is the record that has the list to track
@@ -252,7 +252,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                             // 10 - system defined record type
                             // 11 - record type not found
                             if (error as! CKError).errorCode == 10 || (error as! CKError).errorCode == 11 {
-                                let pathString = "users/\(uid)/\(appID)/TRACKING/\("\(listsToTrack[i])/\(listsToTrack[i+1])")"
+                                let pathString = "users/\(uid)/\(appID)/TRACKING/\("\(listsToTrack[i])~\(listsToTrack[i+1])")"
                                 // shouldn't be tracking this
                                 Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
                                     if error != nil {
@@ -392,7 +392,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         var count: Int?
         
         if record.object(forKey: listName) == nil {
-            let pathString = "users/\(uid)/\(appID)/TRACKING/\("\(recordType)/\(listName)")"
+            let pathString = "users/\(uid)/\(appID)/TRACKING/\("\(recordType)~\(listName)")"
             // shouldn't be tracking this
             Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
                 if error != nil {
