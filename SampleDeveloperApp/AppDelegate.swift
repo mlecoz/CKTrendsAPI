@@ -371,22 +371,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 var oldCount: Int
                 
                 // this path doesn't exist yet
-                if recordTypeToTotalsDict == nil || recordTypeToTotalsDict!?["\(recordType)/\(listName)"] == nil {
+                if recordTypeToTotalsDict == nil || recordTypeToTotalsDict!?["\(recordType)~\(listName)"] == nil {
                     oldCount = 0
                 }
                 else {
-                    guard let oldListCount = Int(recordTypeToTotalsDict!?["\(recordType)/\(listName)"] as! String) else { return }
+                    guard let oldListCount = Int(recordTypeToTotalsDict!?["\(recordType)~\(listName)"] as! String) else { return }
                     oldCount = oldListCount
                 }
                 
                 // update total
-                Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("TOTALS").updateChildValues(["\(recordType)/\(listName)": "\(count!)"], withCompletionBlock: { (error, ref) in
+                Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("TOTALS").updateChildValues(["\(recordType)~\(listName)": "\(count!)"], withCompletionBlock: { (error, ref) in
                     if error == nil {
                         // record LAST_CHECK
                         Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues(["\(recordType)~\(listName)": self.formattedDateForToday()], withCompletionBlock : { (error2, ref) in
                             if error2 == nil {
                                 // save the delta from the last time
-                                Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("DELTAS").updateChildValues(["\(recordType)/\(listName)": count! - oldCount], withCompletionBlock : { (error3, ref) in
+                                Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("DELTAS").updateChildValues(["\(recordType)~\(listName)": count! - oldCount], withCompletionBlock : { (error3, ref) in
                                     if error3 != nil {
                                         self.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.")
                                     }
