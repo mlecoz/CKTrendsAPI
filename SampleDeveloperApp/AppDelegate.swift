@@ -111,7 +111,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         let appID = "1"
         let recordTypesToTrack = ["Blah1", "Users", "Blah", "RecordTypeA", "RecordTypeB"] // add B later
-        let listsToTrack = ["ListType", "list"]
+        let listsToTrack = ["ListType", "list", "AListTypeThatDoesntExist", "list"]
         
         var recordTypesDict = [String:String]()
         for type in recordTypesToTrack {
@@ -201,7 +201,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                             // shoudn't be tracking this
                                             Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
                                                 if error != nil {
-                                                    self.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.")
+                                                    self.presentErrorAlert(message: "CKTrends refresh failed. One of the record types you desire to track does not exist, or you are trying to track a system record type, like User.")
                                                 }
                                             })
                                         }
@@ -237,7 +237,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                 let pathString = "users/\(uid)/\(appID)/TRACKING/\("\(listsToTrack[i])~\(listsToTrack[i+1])")"
                                 // shouldn't be tracking this
                                 Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
-                                    self.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.")
+                                    self.presentErrorAlert(message: "CKTrends refresh failed. One of the record types you desire to track does not exist, or you are trying to track a system record type, like User.")
                                 })
                             }
                             else if (error as! CKError).errorCode == 12 {
