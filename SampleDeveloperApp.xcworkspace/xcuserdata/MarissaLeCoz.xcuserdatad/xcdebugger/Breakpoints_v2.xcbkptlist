@@ -10,60 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540707877.306815"
+            timestampString = "540766485.683767"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "270"
-            endingLineNumber = "270"
+            startingLineNumber = "281"
+            endingLineNumber = "281"
             landmarkName = "saveRecordCounts(records:uid:appID:recordType:isFirstCheck:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540707877.307632"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "195"
-            endingLineNumber = "195"
-            landmarkName = "updateCKTrends(uid:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540707877.307918"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "204"
-            endingLineNumber = "204"
-            landmarkName = "updateCKTrends(uid:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540707877.308183"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "207"
-            endingLineNumber = "207"
-            landmarkName = "updateCKTrends(uid:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -74,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540707877.308442"
+            timestampString = "540766485.684882"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "285"
-            endingLineNumber = "285"
+            startingLineNumber = "296"
+            endingLineNumber = "296"
             landmarkName = "saveRecordCounts(records:uid:appID:recordType:isFirstCheck:)"
             landmarkType = "7">
             <Locations>
@@ -122,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540707877.3086981"
+            timestampString = "540766485.685254"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "284"
-            endingLineNumber = "284"
+            startingLineNumber = "295"
+            endingLineNumber = "295"
             landmarkName = "saveRecordCounts(records:uid:appID:recordType:isFirstCheck:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -138,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540707877.308975"
+            timestampString = "540766485.68558"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "297"
-            endingLineNumber = "297"
+            startingLineNumber = "308"
+            endingLineNumber = "308"
             landmarkName = "saveRecordCounts(records:uid:appID:recordType:isFirstCheck:)"
             landmarkType = "7">
          </BreakpointContent>

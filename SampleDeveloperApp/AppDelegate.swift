@@ -133,106 +133,117 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     // check to see whether the user has checked this record type before; if not, add it to tracking list
                     let pathString = "users/\(uid)/\(appID)/LAST_CHECK"
                     Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
-                
+                        
+                        let recordTypeToLastCheckDict = snapshot.value as? [String:Any]? // record type : last check date
+                        
                         if error == nil {
                             
-                            let recordTypeToLastCheckDict = snapshot.value as? [String:Any]? // record type : last check date
-                    
-                            var isNewRecordType = false // default
-                            if recordTypeToLastCheckDict == nil || recordTypeToLastCheckDict!?[recordType] == nil {
-                                isNewRecordType = true
-                            }
-
-                            // if this is a new record type, query all records of this type
-                            if isNewRecordType {
-                                let predicate = NSPredicate(value: true)
-                                let query = CKQuery(recordType: recordType, predicate: predicate)
-                                let sort = NSSortDescriptor(key: "creationDate", ascending: true) // so the 0th result is the earliest
-                                query.sortDescriptors = [sort]
-                                let operation1 = CKQueryOperation(query: query)
-                                operation1.resultsLimit = 5
-                                operation1.queryCompletionBlock = { (cursor, error) in
-                                    if error != nil {
-                                        self.recordTypeErrorHandling(error: error as! CKError, uid: uid, appID: appID, recordType: recordType)
+                            let pathString2 = "users/\(uid)/\(appID)/EARLIEST_DATE"
+                            Database.database().reference().child(pathString2).observeSingleEvent(of: .value) { snapshot, error2 in
+                                if error2 == nil {
+                                    
+                                    let recordTypeToEarliestDateDict = snapshot.value as? [String:Any]?
+                                    var isNewRecordType = false // default
+                                    if recordTypeToEarliestDateDict == nil || recordTypeToEarliestDateDict!?[recordType] == nil {
+                                        isNewRecordType = true
                                     }
+                                    
+                                    // if this is a new record type, query all records of this type
+                                    if isNewRecordType {
+                                        let predicate = NSPredicate(value: true)
+                                        let query = CKQuery(recordType: recordType, predicate: predicate)
+                                        let sort = NSSortDescriptor(key: "creationDate", ascending: true) // so the 0th result is the earliest
+                                        query.sortDescriptors = [sort]
+                                        let operation1 = CKQueryOperation(query: query)
+                                        operation1.resultsLimit = 5
+                                        operation1.queryCompletionBlock = { (cursor, error) in
+                                            if error != nil {
+                                                self.recordTypeErrorHandling(error: error as! CKError, uid: uid, appID: appID, recordType: recordType)
+                                            }
+                                            else {
+                                                self.queryRecordsWithCursor(cursor: cursor, isFirstCheck: true, uid: uid, appID: appID, recordType: recordType)
+                                            }
+                                            //                                    if error == nil {
+                                            //                                        guard let records = records else {
+                                            //                                            return
+                                            //                                        }
+                                            //                                        self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType, isFirstCheck: true)
+                                            //                                    }
+                                            //                                    else {
+                                            //                                        // 10 - system defined record type
+                                            //                                        // 11 - record type not found
+                                            //                                        if (error as! CKError).errorCode == 10 || (error as! CKError).errorCode == 11 {
+                                            //                                            pathString = "users/\(uid)/\(appID)/TRACKING/\(recordType)"
+                                            //                                            // shouldn't be tracking this
+                                            //                                            Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
+                                            //                                                if error != nil {
+                                            //                                                    self.presentErrorAlert(message: "CKTrends refresh failed. One of the record types you desire to track does not exist, or you are trying to track a system record type, like User.")
+                                            //                                                }
+                                            //                                            })
+                                            //                                        }
+                                            //                                        else if (error as! CKError).errorCode == 12 {
+                                            //                                            self.presentErrorAlert(message: "CKTrends refresh failed. Make sure that the Record Types you wish to track have a queryable recordName and a queryable & sortable createdAt. (See API documentation for help.)")
+                                            //                                        }
+                                            //                                    }
+                                            //                                    // error 12 indicates that the record type is not sortable (or queryable?)
+                                            //                                    // error 10 - can't query system types
+                                        }
+                                        
+                                        CKContainer.default().publicCloudDatabase.add(operation1)
+                                    }
+                                        
+                                        // if this isn't a new record type, query all record since the last time this type was tracked
+                                        // edge case: include that day itself. (Suppose that the user checked midday, and now they check again later in the
+                                        // day. To avoid overriding the count from earlier in the day, we need query for all records created on that day.)
                                     else {
-                                        self.queryRecordsWithCursor(cursor: cursor, isFirstCheck: true, uid: uid, appID: appID, recordType: recordType)
+                                        
+                                        guard let lastCheckAsStr = recordTypeToLastCheckDict!?[recordType] as? String else {
+                                            return
+                                        }
+                                        // get all records from the day of the last check and after
+                                        let predicate = NSPredicate(format: "%K >= %@", "creationDate", self.dateFromString(stringDate: lastCheckAsStr)!)
+                                        let query = CKQuery(recordType: recordType, predicate: predicate)
+                                        let operation2 = CKQueryOperation(query: query)
+                                        operation2.resultsLimit = 5
+                                        operation2.queryCompletionBlock = { (cursor, error) in
+                                            if error != nil {
+                                                self.recordTypeErrorHandling(error: error as! CKError, uid: uid, appID: appID, recordType: recordType)
+                                            }
+                                            else {
+                                                self.queryRecordsWithCursor(cursor: cursor, isFirstCheck: false, uid: uid, appID: appID, recordType: recordType)
+                                            }
+                                        }
+                                        CKContainer.default().publicCloudDatabase.add(operation2)
+                                        //                                self.db.perform(query, inZoneWith: nil) { records, error in
+                                        //                                    if error == nil {
+                                        //                                        guard let records = records else {
+                                        //                                            return
+                                        //                                        }
+                                        //                                        self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType, isFirstCheck: false)
+                                        //                                    }
+                                        //                                    else {
+                                        //                                        // 10 - system defined record type
+                                        //                                        // 11 - record type not found
+                                        //                                        if (error as! CKError).errorCode == 10 || (error as! CKError).errorCode == 11 {
+                                        //                                            pathString = "users/\(uid)/\(appID)/TRACKING/\(recordType)"
+                                        //                                            // shoudn't be tracking this
+                                        //                                            Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
+                                        //                                                if error != nil {
+                                        //                                                    self.presentErrorAlert(message: "CKTrends refresh failed. One of the record types you desire to track does not exist, or you are trying to track a system record type, like User.")
+                                        //                                                }
+                                        //                                            })
+                                        //                                        }
+                                        //                                        else if (error as! CKError).errorCode == 12 {
+                                        //                                            self.presentErrorAlert(message: "CKTrends refresh failed. Make sure that the Record Types you wish to track have a queryable recordName and a queryable & sortable createdAt. (See API documentation for help.)")
+                                        //                                        }
+                                        //                                    }
+                                        //                                }
                                     }
-//                                    if error == nil {
-//                                        guard let records = records else {
-//                                            return
-//                                        }
-//                                        self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType, isFirstCheck: true)
-//                                    }
-//                                    else {
-//                                        // 10 - system defined record type
-//                                        // 11 - record type not found
-//                                        if (error as! CKError).errorCode == 10 || (error as! CKError).errorCode == 11 {
-//                                            pathString = "users/\(uid)/\(appID)/TRACKING/\(recordType)"
-//                                            // shouldn't be tracking this
-//                                            Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
-//                                                if error != nil {
-//                                                    self.presentErrorAlert(message: "CKTrends refresh failed. One of the record types you desire to track does not exist, or you are trying to track a system record type, like User.")
-//                                                }
-//                                            })
-//                                        }
-//                                        else if (error as! CKError).errorCode == 12 {
-//                                            self.presentErrorAlert(message: "CKTrends refresh failed. Make sure that the Record Types you wish to track have a queryable recordName and a queryable & sortable createdAt. (See API documentation for help.)")
-//                                        }
-//                                    }
-//                                    // error 12 indicates that the record type is not sortable (or queryable?)
-//                                    // error 10 - can't query system types
                                 }
+                                else {
+                                    self.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.")
 
-                                CKContainer.default().publicCloudDatabase.add(operation1)
-                            }
-                                
-                            // if this isn't a new record type, query all record since the last time this type was tracked
-                            // edge case: include that day itself. (Suppose that the user checked midday, and now they check again later in the
-                            // day. To avoid overriding the count from earlier in the day, we need query for all records created on that day.)
-                            else {
-                            
-                                guard let lastCheckAsStr = recordTypeToLastCheckDict!?[recordType] as? String else {
-                                    return
                                 }
-                                // get all records from the day of the last check and after
-                                let predicate = NSPredicate(format: "%K >= %@", "creationDate", self.dateFromString(stringDate: lastCheckAsStr)!)
-                                let query = CKQuery(recordType: recordType, predicate: predicate)
-                                let operation2 = CKQueryOperation(query: query)
-                                operation2.resultsLimit = 5
-                                operation2.queryCompletionBlock = { (cursor, error) in
-                                    if error != nil {
-                                        self.recordTypeErrorHandling(error: error as! CKError, uid: uid, appID: appID, recordType: recordType)
-                                    }
-                                    else {
-                                        self.queryRecordsWithCursor(cursor: cursor, isFirstCheck: false, uid: uid, appID: appID, recordType: recordType)
-                                    }
-                                }
-                                CKContainer.default().publicCloudDatabase.add(operation2)
-//                                self.db.perform(query, inZoneWith: nil) { records, error in
-//                                    if error == nil {
-//                                        guard let records = records else {
-//                                            return
-//                                        }
-//                                        self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType, isFirstCheck: false)
-//                                    }
-//                                    else {
-//                                        // 10 - system defined record type
-//                                        // 11 - record type not found
-//                                        if (error as! CKError).errorCode == 10 || (error as! CKError).errorCode == 11 {
-//                                            pathString = "users/\(uid)/\(appID)/TRACKING/\(recordType)"
-//                                            // shoudn't be tracking this
-//                                            Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
-//                                                if error != nil {
-//                                                    self.presentErrorAlert(message: "CKTrends refresh failed. One of the record types you desire to track does not exist, or you are trying to track a system record type, like User.")
-//                                                }
-//                                            })
-//                                        }
-//                                        else if (error as! CKError).errorCode == 12 {
-//                                            self.presentErrorAlert(message: "CKTrends refresh failed. Make sure that the Record Types you wish to track have a queryable recordName and a queryable & sortable createdAt. (See API documentation for help.)")
-//                                        }
-//                                    }
-//                                }
                             }
                         }
                         else {
@@ -478,39 +489,64 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     // adapted from: https://gist.github.com/evermeer/5df7ad1f8db529893f40
     func queryRecordsWithCursor(cursor: CKQueryCursor?, isFirstCheck: Bool, uid: String, appID: String, recordType: String) {
         
-        guard let theCursor = cursor else { return }
-        let operation = CKQueryOperation(cursor: theCursor)
-        
-        // clear list if we've been here before
-        if self.recordTypeToRecordListDict[recordType] != nil {
-            self.recordTypeToRecordListDict[recordType]?.removeAll()
-        }
-        
-        // happens each time a record is received
-        operation.recordFetchedBlock = { [recordType] record in
-            if self.recordTypeToRecordListDict[recordType] == nil {
-                self.recordTypeToRecordListDict[recordType] = [record]
-            }
-            else {
-                self.recordTypeToRecordListDict[recordType]?.append(record)
-            }
-        }
-        // happens when all records are done
-        operation.queryCompletionBlock = { [recordType] cursor, error in
-            if error == nil {
-                if let theCursor = cursor {
-                    // cursor is nil => we've gotten all records, so save them
-                    if self.recordTypeToRecordListDict[recordType] != nil {
-                        self.saveRecordCounts(records: self.recordTypeToRecordListDict[recordType]!, uid: uid, appID: appID, recordType: recordType, isFirstCheck: isFirstCheck)
-                        self.queryRecordsWithCursor(cursor: theCursor, isFirstCheck: isFirstCheck, uid: uid, appID: appID, recordType: recordType)
+        // set to false, and check below if it genuinely should be true
+        var localIsFirstCheck = false
+
+        // Make sure it's really still the first check and not just a recursive artifact:
+        // If we're anywhere past the first frame of the recursive call, isFirstCheck should really be false now (because we only want to record the EARLIEST_DATE once).
+        // TODO v2: make the code simpler and more understandable - get rid of the isFirstCheck boolean. With how the code has evolved, it doesn't make as much sense anymore.
+        if isFirstCheck {
+            let pathString = "users/\(uid)/\(appID)/EARLIEST_DATE"
+            Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
+                if error == nil {
+                    
+                    let recordTypeToEarliestDateDict = snapshot.value as? [String:Any]?
+                    if recordTypeToEarliestDateDict == nil || recordTypeToEarliestDateDict!?[recordType] == nil {
+                        localIsFirstCheck = true
                     }
+                    
+                    guard let theCursor = cursor else { return }
+                    let operation = CKQueryOperation(cursor: theCursor)
+                    
+                    // clear list if we've been here before
+                    if self.recordTypeToRecordListDict[recordType] != nil {
+                        self.recordTypeToRecordListDict[recordType]?.removeAll()
+                    }
+                    
+                    // happens each time a record is received
+                    operation.recordFetchedBlock = { [recordType] record in
+                        if self.recordTypeToRecordListDict[recordType] == nil {
+                            self.recordTypeToRecordListDict[recordType] = [record]
+                        }
+                        else {
+                            self.recordTypeToRecordListDict[recordType]?.append(record)
+                        }
+                    }
+                    // happens when all records are done
+                    operation.queryCompletionBlock = { [recordType] cursor, error in
+                        if error == nil {
+                            if let theCursor = cursor {
+                                // cursor is nil => we've gotten all records, so save them
+                                if self.recordTypeToRecordListDict[recordType] != nil {
+                                    self.saveRecordCounts(records: self.recordTypeToRecordListDict[recordType]!, uid: uid, appID: appID, recordType: recordType, isFirstCheck: isFirstCheck)
+                                    self.queryRecordsWithCursor(cursor: theCursor, isFirstCheck: localIsFirstCheck, uid: uid, appID: appID, recordType: recordType)
+                                }
+                            }
+                        }
+                        else {
+                            self.recordTypeErrorHandling(error: error as! CKError, uid: uid, appID: appID, recordType: recordType)
+                        }
+                    }
+                    CKContainer.default().publicCloudDatabase.add(operation)
+                    
+                }
+                else {
+                    self.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.")
                 }
             }
-            else {
-                self.recordTypeErrorHandling(error: error as! CKError, uid: uid, appID: appID, recordType: recordType)
-            }
         }
-        CKContainer.default().publicCloudDatabase.add(operation)
+        
+        
     }
     
     func recordTypeErrorHandling(error: CKError, uid: String, appID: String, recordType: String) {
