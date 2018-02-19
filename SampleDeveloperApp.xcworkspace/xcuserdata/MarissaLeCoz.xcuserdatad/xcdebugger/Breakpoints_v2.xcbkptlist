@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540768409.702579"
+            timestampString = "540769512.135303"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "281"
-            endingLineNumber = "281"
+            startingLineNumber = "271"
+            endingLineNumber = "271"
             landmarkName = "saveRecordCounts(records:uid:appID:recordType:isFirstCheck:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540768409.703357"
+            timestampString = "540769512.136109"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "296"
-            endingLineNumber = "296"
+            startingLineNumber = "286"
+            endingLineNumber = "286"
             landmarkName = "saveRecordCounts(records:uid:appID:recordType:isFirstCheck:)"
             landmarkType = "7">
             <Locations>
@@ -42,11 +42,11 @@
                   moduleName = "SampleDeveloperApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/MarissaLeCoz/Documents/xCode/SampleDeveloperApp/SampleDeveloperApp/AppDelegate.swift"
-                  timestampString = "540768409.880741"
+                  timestampString = "540768677.799149"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "296"
-                  endingLineNumber = "296"
+                  startingLineNumber = "286"
+                  endingLineNumber = "286"
                   offsetFromSymbolStart = "2128">
                </Location>
                <Location
@@ -57,11 +57,11 @@
                   moduleName = "SampleDeveloperApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/MarissaLeCoz/Documents/xCode/SampleDeveloperApp/SampleDeveloperApp/AppDelegate.swift"
-                  timestampString = "540768409.884627"
+                  timestampString = "540768677.802609"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "297"
-                  endingLineNumber = "297"
+                  startingLineNumber = "287"
+                  endingLineNumber = "287"
                   offsetFromSymbolStart = "28">
                </Location>
             </Locations>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540768409.703652"
+            timestampString = "540769512.136428"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "295"
-            endingLineNumber = "295"
+            startingLineNumber = "285"
+            endingLineNumber = "285"
             landmarkName = "saveRecordCounts(records:uid:appID:recordType:isFirstCheck:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -90,28 +90,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540768409.703934"
+            timestampString = "540769512.136727"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "308"
-            endingLineNumber = "308"
+            startingLineNumber = "298"
+            endingLineNumber = "298"
             landmarkName = "saveRecordCounts(records:uid:appID:recordType:isFirstCheck:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540768409.7042609"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "502"
-            endingLineNumber = "502"
-            landmarkName = "queryRecordsWithCursor(cursor:isFirstCheck:uid:appID:recordType:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
