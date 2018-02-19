@@ -150,7 +150,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                 let sort = NSSortDescriptor(key: "creationDate", ascending: true) // so the 0th result is the earliest
                                 query.sortDescriptors = [sort]
                                 let operation1 = CKQueryOperation(query: query)
-                                operation1.resultsLimit = 5
+                                operation1.resultsLimit = 100
                                 operation1.queryCompletionBlock = { (cursor, error) in
                                     if error != nil {
                                         self.recordTypeErrorHandling(error: error as! CKError, uid: uid, appID: appID, recordType: recordType)
@@ -480,6 +480,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         guard let theCursor = cursor else { return }
         let operation = CKQueryOperation(cursor: theCursor)
+        
+        // clear list if we've been here before
+        if self.recordTypeToRecordListDict[recordType] != nil {
+            self.recordTypeToRecordListDict[recordType]?.removeAll()
+        }
         
         // happens each time a record is received
         operation.recordFetchedBlock = { [recordType] record in
