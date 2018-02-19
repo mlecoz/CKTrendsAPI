@@ -112,7 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func updateCKTrends(uid: String) {
         
         let appID = "1"
-        let recordTypesToTrack = ["Blah1", "Users", "Blah", "RecordTypeA", "RecordTypeB"] // add B later
+        let recordTypesToTrack = ["RecordTypeA"] //["Blah1", "Users", "Blah", "RecordTypeA", "RecordTypeB"] // add B later
         let listsToTrack = ["ListType", "list", "AListTypeThatDoesntExist", "list"]
         
         var recordTypesDict = [String:String]()
@@ -495,58 +495,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Make sure it's really still the first check and not just a recursive artifact:
         // If we're anywhere past the first frame of the recursive call, isFirstCheck should really be false now (because we only want to record the EARLIEST_DATE once).
         // TODO v2: make the code simpler and more understandable - get rid of the isFirstCheck boolean. With how the code has evolved, it doesn't make as much sense anymore.
-        if isFirstCheck {
-            let pathString = "users/\(uid)/\(appID)/EARLIEST_DATE"
-            Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
-                if error == nil {
-                    
-                    let recordTypeToEarliestDateDict = snapshot.value as? [String:Any]?
-                    if recordTypeToEarliestDateDict == nil || recordTypeToEarliestDateDict!?[recordType] == nil {
-                        localIsFirstCheck = true
+        let pathString = "users/\(uid)/\(appID)/EARLIEST_DATE"
+        Database.database().reference().child(pathString).observeSingleEvent(of: .value) { snapshot, error in
+            if error == nil {
+                
+                let recordTypeToEarliestDateDict = snapshot.value as? [String:Any]?
+                if recordTypeToEarliestDateDict == nil || recordTypeToEarliestDateDict!?[recordType] == nil {
+                    localIsFirstCheck = true
+                }
+                
+                guard let theCursor = cursor else { return }
+                let operation = CKQueryOperation(cursor: theCursor)
+                
+                // clear list if we've been here before
+                if self.recordTypeToRecordListDict[recordType] != nil {
+                    self.recordTypeToRecordListDict[recordType]?.removeAll()
+                }
+                
+                // happens each time a record is received
+                operation.recordFetchedBlock = { [recordType] record in
+                    if self.recordTypeToRecordListDict[recordType] == nil {
+                        self.recordTypeToRecordListDict[recordType] = [record]
                     }
-                    
-                    guard let theCursor = cursor else { return }
-                    let operation = CKQueryOperation(cursor: theCursor)
-                    
-                    // clear list if we've been here before
-                    if self.recordTypeToRecordListDict[recordType] != nil {
-                        self.recordTypeToRecordListDict[recordType]?.removeAll()
+                    else {
+                        self.recordTypeToRecordListDict[recordType]?.append(record)
                     }
-                    
-                    // happens each time a record is received
-                    operation.recordFetchedBlock = { [recordType] record in
-                        if self.recordTypeToRecordListDict[recordType] == nil {
-                            self.recordTypeToRecordListDict[recordType] = [record]
-                        }
-                        else {
-                            self.recordTypeToRecordListDict[recordType]?.append(record)
-                        }
-                    }
-                    // happens when all records are done
-                    operation.queryCompletionBlock = { [recordType] cursor, error in
-                        if error == nil {
-                            if let theCursor = cursor {
-                                // cursor is nil => we've gotten all records, so save them
-                                if self.recordTypeToRecordListDict[recordType] != nil {
-                                    self.saveRecordCounts(records: self.recordTypeToRecordListDict[recordType]!, uid: uid, appID: appID, recordType: recordType, isFirstCheck: isFirstCheck)
-                                    self.queryRecordsWithCursor(cursor: theCursor, isFirstCheck: localIsFirstCheck, uid: uid, appID: appID, recordType: recordType)
-                                }
+                }
+                // happens when all records are done
+                operation.queryCompletionBlock = { [recordType] cursor, error in
+                    if error == nil {
+                        if let theCursor = cursor {
+                            // cursor is nil => we've gotten all records, so save them
+                            if self.recordTypeToRecordListDict[recordType] != nil {
+                                self.saveRecordCounts(records: self.recordTypeToRecordListDict[recordType]!, uid: uid, appID: appID, recordType: recordType, isFirstCheck: isFirstCheck)
+                                self.queryRecordsWithCursor(cursor: theCursor, isFirstCheck: localIsFirstCheck, uid: uid, appID: appID, recordType: recordType)
                             }
                         }
-                        else {
-                            self.recordTypeErrorHandling(error: error as! CKError, uid: uid, appID: appID, recordType: recordType)
-                        }
                     }
-                    CKContainer.default().publicCloudDatabase.add(operation)
-                    
+                    else {
+                        self.recordTypeErrorHandling(error: error as! CKError, uid: uid, appID: appID, recordType: recordType)
+                    }
                 }
-                else {
-                    self.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.")
-                }
+                CKContainer.default().publicCloudDatabase.add(operation)
+                
+            }
+            else {
+                self.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.")
             }
         }
-        
-        
     }
     
     func recordTypeErrorHandling(error: CKError, uid: String, appID: String, recordType: String) {
