@@ -150,7 +150,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                 let sort = NSSortDescriptor(key: "creationDate", ascending: true) // so the 0th result is the earliest
                                 query.sortDescriptors = [sort]
                                 let operation1 = CKQueryOperation(query: query)
-                                operation1.resultsLimit = 100
+                                operation1.resultsLimit = 5
                                 operation1.queryCompletionBlock = { (cursor, error) in
                                     if error != nil {
                                         self.recordTypeErrorHandling(error: error as! CKError, uid: uid, appID: appID, recordType: recordType)
@@ -205,7 +205,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                         self.recordTypeErrorHandling(error: error as! CKError, uid: uid, appID: appID, recordType: recordType)
                                     }
                                     else {
-                                        self.queryRecordsWithCursor(cursor: cursor, isFirstCheck: true, uid: uid, appID: appID, recordType: recordType)
+                                        self.queryRecordsWithCursor(cursor: cursor, isFirstCheck: false, uid: uid, appID: appID, recordType: recordType)
                                     }
                                 }
                                 CKContainer.default().publicCloudDatabase.add(operation2)
