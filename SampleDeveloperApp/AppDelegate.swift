@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var firebaseDBRef: DatabaseReference?
     
     var recordTypeToRecordListDict = [String:[CKRecord]]()
-    var isFirstCheckDict = [String:Bool]()
+//    var isFirstCheckDict = [String:Bool]()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -159,30 +159,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                     else {
                                         self.queryRecordsWithCursor(cursor: cursor, isFirstCheck: true, uid: uid, appID: appID, recordType: recordType)
                                     }
-//                                    if error == nil {
-//                                        guard let records = records else {
-//                                            return
-//                                        }
-//                                        self.saveRecordCounts(records: records, uid: uid, appID: appID, recordType: recordType, isFirstCheck: true)
-//                                    }
-//                                    else {
-//                                        // 10 - system defined record type
-//                                        // 11 - record type not found
-//                                        if (error as! CKError).errorCode == 10 || (error as! CKError).errorCode == 11 {
-//                                            pathString = "users/\(uid)/\(appID)/TRACKING/\(recordType)"
-//                                            // shouldn't be tracking this
-//                                            Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
-//                                                if error != nil {
-//                                                    self.presentErrorAlert(message: "CKTrends refresh failed. One of the record types you desire to track does not exist, or you are trying to track a system record type, like User.")
-//                                                }
-//                                            })
-//                                        }
-//                                        else if (error as! CKError).errorCode == 12 {
-//                                            self.presentErrorAlert(message: "CKTrends refresh failed. Make sure that the Record Types you wish to track have a queryable recordName and a queryable & sortable createdAt. (See API documentation for help.)")
-//                                        }
-//                                    }
-//                                    // error 12 indicates that the record type is not sortable (or queryable?)
-//                                    // error 10 - can't query system types
                                 }
 
                                 CKContainer.default().publicCloudDatabase.add(operation1)
@@ -321,6 +297,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                             Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: self.formattedDateForToday()], withCompletionBlock : { (error2, ref) in
                                 if error2 != nil {
                                     self.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.")
+                                }
+                                else {
+                                    if self.recordTypeToRecordListDict[recordType] != nil {
+                                        self.recordTypeToRecordListDict[recordType]?.removeAll()
+                                    }
                                 }
                             })
                         }
@@ -482,10 +463,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         guard let theCursor = cursor else { return }
         let operation = CKQueryOperation(cursor: theCursor)
         
-        // clear list if we've been here before
-        if self.recordTypeToRecordListDict[recordType] != nil {
-            self.recordTypeToRecordListDict[recordType]?.removeAll()
-        }
+//        // clear list if we've been here before
+//        if self.recordTypeToRecordListDict[recordType] != nil {
+//            self.recordTypeToRecordListDict[recordType]?.removeAll()
+//        }
         
         // happens each time a record is received
         operation.recordFetchedBlock = { [recordType] record in
@@ -499,13 +480,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // happens when all records are done
         operation.queryCompletionBlock = { [recordType] cursor, error in
             if error == nil {
-                if let theCursor = cursor {
-                    // cursor is nil => we've gotten all records, so save them
-                    if self.recordTypeToRecordListDict[recordType] != nil {
-                        self.isFirstCheckDict[recordType] = false // for the next recursive call. This needs to preceded the following two method calls because they are asynchronous
-                        self.saveRecordCounts(records: self.recordTypeToRecordListDict[recordType]!, uid: uid, appID: appID, recordType: recordType, isFirstCheck: isFirstCheck) // use isFirstCheck, not the value in the dictionary
-                        self.queryRecordsWithCursor(cursor: theCursor, isFirstCheck: self.isFirstCheckDict[recordType]!, uid: uid, appID: appID, recordType: recordType)
-                    }
+                if cursor == nil { // cursor is nil => we've gotten all records, so save them
+                    self.saveRecordCounts(records: self.recordTypeToRecordListDict[recordType]!, uid: uid, appID: appID, recordType: recordType, isFirstCheck: isFirstCheck) // use isFirstCheck, not the value in the dictionary
+                }
+                else if self.recordTypeToRecordListDict[recordType] != nil {
+                    //self.isFirstCheckDict[recordType] = false // for the next recursive call. This needs to precede the following method call because it is asynchronous
+                    self.queryRecordsWithCursor(cursor: cursor, isFirstCheck: isFirstCheck, uid: uid, appID: appID, recordType: recordType) // recursive call. if we've gotten here, there's definitely a non-nil cursor
                 }
             }
             else {
