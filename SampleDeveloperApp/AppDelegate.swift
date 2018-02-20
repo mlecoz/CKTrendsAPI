@@ -75,6 +75,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             if environment == 1 { // production
                 logIn()
             }
+            else {
+                self.presentErrorAlert(message: "CKTrends has detected that your app is using its CloudKit development environment. CKTrends only works when your app is using its CloudKit production environment.")
+            }
             
             
         }
