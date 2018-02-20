@@ -72,12 +72,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             let container = CKContainer.default()
             let containerID = container.value(forKey: "containerID") as! NSObject // CKContainerID
             let environment = containerID.value(forKey: "environment")! as! Int
-            if environment == 1 { // production
+//            if environment == 1 { // production
                 logIn()
-            }
-            else {
-                self.presentErrorAlert(message: "CKTrends has detected that your app is using its CloudKit development environment. CKTrends only works when your app is using its CloudKit production environment.")
-            }
+//            }
+//            else {
+//                self.presentErrorAlert(message: "CKTrends has detected that your app is using its CloudKit development environment. CKTrends only works when your app is using its CloudKit production environment.")
+//            }
             
             
         }
@@ -128,7 +128,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         let appID = "1"
         let recordTypesToTrack = ["Blah1", "Users", "Blah", "RecordTypeA", "RecordTypeB"] // add B later
-        let listsToTrack = ["ListType", "list", "AListTypeThatDoesntExist", "list"]
+        let listsToTrack = ["ListType", "list"]
         
         var recordTypesDict = [String:String]()
         for type in recordTypesToTrack {
