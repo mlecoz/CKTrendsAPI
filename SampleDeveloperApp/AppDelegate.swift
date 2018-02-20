@@ -64,7 +64,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         
         if sendingAppID == "com.MarissaLeCoz.AnalyticsApp" {
-            logIn()
+            
+            // figuring out whether we are in the dev (2) or production (1) cloudkit db
+            // from https://stackoverflow.com/questions/32464734/how-can-cloudkit-environment-be-determined-at-runtime
+            // CKTrends should only work with Production.
+            // This check is, albeit, hacky. If the API stops recording trends, Apple may have changed its environment numbers.
+            let container = CKContainer.default()
+            let containerID = container.value(forKey: "containerID") as! NSObject // CKContainerID
+            let environment = containerID.value(forKey: "environment")! as! Int
+            if environment == 1 { // production
+                logIn()
+            }
+            
+            
         }
         
         return true
@@ -484,4 +496,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
     }
 }
-

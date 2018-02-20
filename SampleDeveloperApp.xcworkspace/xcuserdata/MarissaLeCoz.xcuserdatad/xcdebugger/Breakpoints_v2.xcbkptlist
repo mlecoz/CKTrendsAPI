@@ -10,13 +10,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540786975.770435"
+            timestampString = "540788434.272764"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "271"
-            endingLineNumber = "271"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "67"
+            endingLineNumber = "67"
+            landmarkName = "application(_:open:options:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -26,45 +26,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540786975.771984"
+            timestampString = "540788434.2741441"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "297"
-            endingLineNumber = "297"
-            landmarkName = "unknown"
-            landmarkType = "0">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Error&gt;, __ObjC.DatabaseReference) -&gt; () in closure #3 (__ObjC.DataSnapshot, Swift.Optional&lt;Swift.String&gt;) -&gt; () in SampleDeveloperApp.AppDelegate.saveRecordCounts(records: Swift.Array&lt;__ObjC.CKRecord&gt;, uid: Swift.String, appID: Swift.String, recordType: Swift.String, isFirstCheck: Swift.Bool) -&gt; ()"
-                  moduleName = "SampleDeveloperApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/MarissaLeCoz/Documents/xCode/SampleDeveloperApp/SampleDeveloperApp/AppDelegate.swift"
-                  timestampString = "540786632.547178"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "297"
-                  endingLineNumber = "297"
-                  offsetFromSymbolStart = "228">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Error&gt;, __ObjC.DatabaseReference) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Error&gt;, __ObjC.DatabaseReference) -&gt; () in closure #3 (__ObjC.DataSnapshot, Swift.Optional&lt;Swift.String&gt;) -&gt; () in SampleDeveloperApp.AppDelegate.saveRecordCounts(records: Swift.Array&lt;__ObjC.CKRecord&gt;, uid: Swift.String, appID: Swift.String, recordType: Swift.String, isFirstCheck: Swift.Bool) -&gt; ()"
-                  moduleName = "SampleDeveloperApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/MarissaLeCoz/Documents/xCode/SampleDeveloperApp/SampleDeveloperApp/AppDelegate.swift"
-                  timestampString = "540786632.550516"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "298"
-                  endingLineNumber = "298"
-                  offsetFromSymbolStart = "40">
-               </Location>
-            </Locations>
+            startingLineNumber = "70"
+            endingLineNumber = "70"
+            landmarkName = "application(_:open:options:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -74,141 +42,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540786975.7727441"
+            timestampString = "540788434.274832"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "299"
-            endingLineNumber = "299"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540786975.773344"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "294"
-            endingLineNumber = "294"
-            landmarkName = "unknown"
-            landmarkType = "0">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #3 (__ObjC.DataSnapshot, Swift.Optional&lt;Swift.String&gt;) -&gt; () in SampleDeveloperApp.AppDelegate.saveRecordCounts(records: Swift.Array&lt;__ObjC.CKRecord&gt;, uid: Swift.String, appID: Swift.String, recordType: Swift.String, isFirstCheck: Swift.Bool) -&gt; ()"
-                  moduleName = "SampleDeveloperApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/MarissaLeCoz/Documents/xCode/SampleDeveloperApp/SampleDeveloperApp/AppDelegate.swift"
-                  timestampString = "540786632.5697581"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "294"
-                  endingLineNumber = "294"
-                  offsetFromSymbolStart = "2724">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Error&gt;, __ObjC.DatabaseReference) -&gt; () in closure #3 (__ObjC.DataSnapshot, Swift.Optional&lt;Swift.String&gt;) -&gt; () in SampleDeveloperApp.AppDelegate.saveRecordCounts(records: Swift.Array&lt;__ObjC.CKRecord&gt;, uid: Swift.String, appID: Swift.String, recordType: Swift.String, isFirstCheck: Swift.Bool) -&gt; ()"
-                  moduleName = "SampleDeveloperApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/MarissaLeCoz/Documents/xCode/SampleDeveloperApp/SampleDeveloperApp/AppDelegate.swift"
-                  timestampString = "540786632.573745"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "295"
-                  endingLineNumber = "295"
-                  offsetFromSymbolStart = "80">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540786975.77385"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "290"
-            endingLineNumber = "290"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540786975.774501"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "276"
-            endingLineNumber = "276"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SampleDeveloperApp/AppDelegate.swift"
-            timestampString = "540786975.7751909"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "285"
-            endingLineNumber = "285"
-            landmarkName = "unknown"
-            landmarkType = "0">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #3 (__ObjC.DataSnapshot, Swift.Optional&lt;Swift.String&gt;) -&gt; () in SampleDeveloperApp.AppDelegate.saveRecordCounts(records: Swift.Array&lt;__ObjC.CKRecord&gt;, uid: Swift.String, appID: Swift.String, recordType: Swift.String, isFirstCheck: Swift.Bool) -&gt; ()"
-                  moduleName = "SampleDeveloperApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/MarissaLeCoz/Documents/xCode/SampleDeveloperApp/SampleDeveloperApp/AppDelegate.swift"
-                  timestampString = "540786632.589985"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "285"
-                  endingLineNumber = "285"
-                  offsetFromSymbolStart = "1772">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #3 (__ObjC.DataSnapshot, Swift.Optional&lt;Swift.String&gt;) -&gt; () in SampleDeveloperApp.AppDelegate.saveRecordCounts(records: Swift.Array&lt;__ObjC.CKRecord&gt;, uid: Swift.String, appID: Swift.String, recordType: Swift.String, isFirstCheck: Swift.Bool) -&gt; ()"
-                  moduleName = "SampleDeveloperApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/MarissaLeCoz/Documents/xCode/SampleDeveloperApp/SampleDeveloperApp/AppDelegate.swift"
-                  timestampString = "540786632.593007"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "285"
-                  endingLineNumber = "285"
-                  offsetFromSymbolStart = "6544">
-               </Location>
-            </Locations>
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "application(_:open:options:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
