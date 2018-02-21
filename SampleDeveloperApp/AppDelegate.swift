@@ -395,6 +395,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 formatter.dateFormat = "MM-dd-yy"
                 let formattedDate = formatter.string(from: date)
                 
+                if formattedDate == "18-02-19" {
+                    print("Stop right there!")
+                }
+                
                 if dateToCountDict[formattedDate] != nil {
                     dateToCountDict[formattedDate] = dateToCountDict[formattedDate]! + 1
                 }
@@ -426,7 +430,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
-        dateFormatter.timeZone = TimeZone.current
+        dateFormatter.timeZone = TimeZone(identifier: "GMT")
         var date = dateFormatter.date(from: stringDate)
         
         // set to the beginning of the day
@@ -462,10 +466,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 self.recordTypeToRecordListDict[recordType]?.append(record)
             }
         }
-        // happens when all records are done
+        // happens when all records are done for that cursor
         operation.queryCompletionBlock = { [recordType] cursor, error in
             if error == nil {
                 if cursor == nil { // cursor is nil => we've gotten all records, so save them
+                    if recordType == "RecordTypeB" {
+                        print("Stop right there!")
+                    }
                     self.saveRecordCounts(records: self.recordTypeToRecordListDict[recordType]!, uid: uid, appID: appID, recordType: recordType, isFirstCheck: isFirstCheck) // use isFirstCheck, not the value in the dictionary
                 }
                 else if self.recordTypeToRecordListDict[recordType] != nil {
