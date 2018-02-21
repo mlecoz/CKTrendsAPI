@@ -166,7 +166,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                 query.sortDescriptors = [sort]
                                 
                                 let operation1 = CKQueryOperation(query: query)
-                                operation1.resultsLimit = 5
+                                operation1.resultsLimit = 100
                                 operation1.recordFetchedBlock = { [recordType] record in
                                     if self.recordTypeToRecordListDict[recordType] == nil {
                                         self.recordTypeToRecordListDict[recordType] = [record]
@@ -199,7 +199,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                 let predicate = NSPredicate(format: "%K >= %@", "creationDate", self.dateFromString(stringDate: lastCheckAsStr)!)
                                 let query = CKQuery(recordType: recordType, predicate: predicate)
                                 let operation2 = CKQueryOperation(query: query)
-                                operation2.resultsLimit = 5
+                                operation2.resultsLimit = 100
                                 operation2.recordFetchedBlock = { [recordType] record in
                                     if self.recordTypeToRecordListDict[recordType] == nil {
                                         self.recordTypeToRecordListDict[recordType] = [record]
