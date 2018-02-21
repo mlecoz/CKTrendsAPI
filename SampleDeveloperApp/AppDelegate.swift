@@ -253,10 +253,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func saveRecordCounts(records: [CKRecord], uid: String, appID: String, recordType: String, isFirstCheck: Bool) {
-        
-        if recordType == "RecordTypeA" {
-            print("STAHP!")
-        }
 
         let dateToCountDict = dateToCountDictionary(records: records)
         
