@@ -164,8 +164,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                 let query = CKQuery(recordType: recordType, predicate: predicate)
                                 let sort = NSSortDescriptor(key: "creationDate", ascending: true) // so the 0th result is the earliest
                                 query.sortDescriptors = [sort]
+                                
                                 let operation1 = CKQueryOperation(query: query)
                                 operation1.resultsLimit = 5
+                                operation1.recordFetchedBlock = { [recordType] record in
+                                    if self.recordTypeToRecordListDict[recordType] == nil {
+                                        self.recordTypeToRecordListDict[recordType] = [record]
+                                    }
+                                    else {
+                                        self.recordTypeToRecordListDict[recordType]?.append(record)
+                                    }
+                                }
                                 operation1.queryCompletionBlock = { (cursor, error) in
                                     if error != nil {
                                         self.recordTypeErrorHandling(error: error as! CKError, uid: uid, appID: appID, recordType: recordType)
@@ -191,9 +200,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                 let query = CKQuery(recordType: recordType, predicate: predicate)
                                 let operation2 = CKQueryOperation(query: query)
                                 operation2.resultsLimit = 5
+                                operation2.recordFetchedBlock = { [recordType] record in
+                                    if self.recordTypeToRecordListDict[recordType] == nil {
+                                        self.recordTypeToRecordListDict[recordType] = [record]
+                                    }
+                                    else {
+                                        self.recordTypeToRecordListDict[recordType]?.append(record)
+                                    }
+                                }
                                 operation2.queryCompletionBlock = { (cursor, error) in
                                     if error != nil {
                                         self.recordTypeErrorHandling(error: error as! CKError, uid: uid, appID: appID, recordType: recordType)
+                                    }
+                                    else if cursor == nil {
+                                        self.saveRecordCounts(records: self.recordTypeToRecordListDict[recordType]!, uid: uid, appID: appID, recordType: recordType, isFirstCheck: false)
                                     }
                                     else {
                                         self.queryRecordsWithCursor(cursor: cursor, isFirstCheck: false, uid: uid, appID: appID, recordType: recordType)
@@ -234,6 +254,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func saveRecordCounts(records: [CKRecord], uid: String, appID: String, recordType: String, isFirstCheck: Bool) {
         
+        if recordType == "RecordTypeA" {
+            print("STAHP!")
+        }
+
         let dateToCountDict = dateToCountDictionary(records: records)
         
         // if it's the first time checking, record the earliest date
@@ -395,10 +419,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 formatter.dateFormat = "MM-dd-yy"
                 let formattedDate = formatter.string(from: date)
                 
-                if formattedDate == "18-02-19" {
-                    print("Stop right there!")
-                }
-                
                 if dateToCountDict[formattedDate] != nil {
                     dateToCountDict[formattedDate] = dateToCountDict[formattedDate]! + 1
                 }
@@ -470,9 +490,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         operation.queryCompletionBlock = { [recordType] cursor, error in
             if error == nil {
                 if cursor == nil { // cursor is nil => we've gotten all records, so save them
-                    if recordType == "RecordTypeB" {
-                        print("Stop right there!")
-                    }
                     self.saveRecordCounts(records: self.recordTypeToRecordListDict[recordType]!, uid: uid, appID: appID, recordType: recordType, isFirstCheck: isFirstCheck) // use isFirstCheck, not the value in the dictionary
                 }
                 else if self.recordTypeToRecordListDict[recordType] != nil {
