@@ -15,6 +15,7 @@
 		E11E76741F8C816F00FEA764 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E11E76731F8C816F00FEA764 /* GoogleService-Info.plist */; };
 		E11E76751F8C816F00FEA764 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E11E76731F8C816F00FEA764 /* GoogleService-Info.plist */; };
 		E11E76761F8C816F00FEA764 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E11E76731F8C816F00FEA764 /* GoogleService-Info.plist */; };
+		E11F526120549E1700DD8990 /* CKTrends.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11F526020549E1700DD8990 /* CKTrends.swift */; };
 		E14CB1D01F77577C00F8C23F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14CB1CF1F77577C00F8C23F /* AppDelegate.swift */; };
 		E14CB1D21F77577C00F8C23F /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14CB1D11F77577C00F8C23F /* FirstViewController.swift */; };
 		E14CB1D41F77577C00F8C23F /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14CB1D31F77577C00F8C23F /* SecondViewController.swift */; };
@@ -60,6 +61,7 @@
 		C9A417783EDAB654E9EFF656 /* Pods_SampleDeveloperAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SampleDeveloperAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D24D217A15BB19D06A83C602 /* Pods-SampleDeveloperAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleDeveloperAppTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SampleDeveloperAppTests/Pods-SampleDeveloperAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E11E76731F8C816F00FEA764 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "/Users/MarissaLeCoz/Documents/xCode/SampleDeveloperApp/SampleDeveloperApp/../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<absolute>"; };
+		E11F526020549E1700DD8990 /* CKTrends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKTrends.swift; sourceTree = "<group>"; };
 		E14CB1CC1F77577C00F8C23F /* SampleDeveloperApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleDeveloperApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E14CB1CF1F77577C00F8C23F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E14CB1D11F77577C00F8C23F /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				E14CB1DA1F77577C00F8C23F /* LaunchScreen.storyboard */,
 				E14CB1DD1F77577C00F8C23F /* Info.plist */,
 				E1731EE12011A45D0080646C /* CKTrendsUtilities.swift */,
+				E11F526020549E1700DD8990 /* CKTrends.swift */,
 			);
 			path = SampleDeveloperApp;
 			sourceTree = "<group>";
@@ -509,6 +512,7 @@
 			files = (
 				E1731EE22011A45D0080646C /* CKTrendsUtilities.swift in Sources */,
 				E14CB1D41F77577C00F8C23F /* SecondViewController.swift in Sources */,
+				E11F526120549E1700DD8990 /* CKTrends.swift in Sources */,
 				E14CB1D01F77577C00F8C23F /* AppDelegate.swift in Sources */,
 				E14CB1D21F77577C00F8C23F /* FirstViewController.swift in Sources */,
 			);
