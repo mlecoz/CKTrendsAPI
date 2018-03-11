@@ -16,6 +16,26 @@
 		E11E76751F8C816F00FEA764 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E11E76731F8C816F00FEA764 /* GoogleService-Info.plist */; };
 		E11E76761F8C816F00FEA764 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E11E76731F8C816F00FEA764 /* GoogleService-Info.plist */; };
 		E11F526120549E1700DD8990 /* CKTrends.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11F526020549E1700DD8990 /* CKTrends.swift */; };
+		E13079D62055CD8D0074CD5B /* CKTrendsAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E13079CD2055CD8C0074CD5B /* CKTrendsAPI.framework */; };
+		E13079DD2055CD8D0074CD5B /* CKTrendsAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13079DC2055CD8D0074CD5B /* CKTrendsAPITests.swift */; };
+		E13079DF2055CD8D0074CD5B /* CKTrendsAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = E13079CF2055CD8C0074CD5B /* CKTrendsAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E13079E22055CD8D0074CD5B /* CKTrendsAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E13079CD2055CD8C0074CD5B /* CKTrendsAPI.framework */; };
+		E13079E32055CD8D0074CD5B /* CKTrendsAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E13079CD2055CD8C0074CD5B /* CKTrendsAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E13079EB2055CDA80074CD5B /* CKTrends.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11F526020549E1700DD8990 /* CKTrends.swift */; };
+		E13079EC2055CDAD0074CD5B /* CKTrendsUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1731EE12011A45D0080646C /* CKTrendsUtilities.swift */; };
+		E13079EE2055CEAA0074CD5B /* FirebaseAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E13079ED2055CEAA0074CD5B /* FirebaseAuth.framework */; };
+		E13079F02055CEAE0074CD5B /* GTMSessionFetcher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E13079EF2055CEAE0074CD5B /* GTMSessionFetcher.framework */; };
+		E13079F22055CEB20074CD5B /* FirebaseDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E13079F12055CEB20074CD5B /* FirebaseDatabase.framework */; };
+		E13079F42055CEB50074CD5B /* leveldb-library.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E13079F32055CEB50074CD5B /* leveldb-library.framework */; };
+		E13079FC2055CEC10074CD5B /* FirebaseCoreDiagnostics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E13079F52055CEC10074CD5B /* FirebaseCoreDiagnostics.framework */; };
+		E13079FD2055CEC10074CD5B /* FirebaseNanoPB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E13079F62055CEC10074CD5B /* FirebaseNanoPB.framework */; };
+		E13079FE2055CEC10074CD5B /* FirebaseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E13079F72055CEC10074CD5B /* FirebaseCore.framework */; };
+		E13079FF2055CEC10074CD5B /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E13079F82055CEC10074CD5B /* FirebaseAnalytics.framework */; };
+		E1307A002055CEC10074CD5B /* nanopb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E13079F92055CEC10074CD5B /* nanopb.framework */; };
+		E1307A012055CEC10074CD5B /* GoogleToolboxForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E13079FA2055CEC10074CD5B /* GoogleToolboxForMac.framework */; };
+		E1307A022055CEC10074CD5B /* FirebaseInstanceID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E13079FB2055CEC10074CD5B /* FirebaseInstanceID.framework */; };
+		E1307A052055CED10074CD5B /* FirebaseStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1307A032055CED10074CD5B /* FirebaseStorage.framework */; };
+		E1307A062055CED10074CD5B /* GTMSessionFetcher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1307A042055CED10074CD5B /* GTMSessionFetcher.framework */; };
 		E14CB1D01F77577C00F8C23F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14CB1CF1F77577C00F8C23F /* AppDelegate.swift */; };
 		E14CB1D21F77577C00F8C23F /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14CB1D11F77577C00F8C23F /* FirstViewController.swift */; };
 		E14CB1D41F77577C00F8C23F /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14CB1D31F77577C00F8C23F /* SecondViewController.swift */; };
@@ -29,6 +49,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		E13079D72055CD8D0074CD5B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E14CB1C41F77577C00F8C23F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E13079CC2055CD8C0074CD5B;
+			remoteInfo = CKTrendsAPI;
+		};
+		E13079D92055CD8D0074CD5B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E14CB1C41F77577C00F8C23F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E14CB1CB1F77577C00F8C23F;
+			remoteInfo = SampleDeveloperApp;
+		};
+		E13079E02055CD8D0074CD5B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E14CB1C41F77577C00F8C23F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E13079CC2055CD8C0074CD5B;
+			remoteInfo = CKTrendsAPI;
+		};
 		E14CB1E31F77577C00F8C23F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E14CB1C41F77577C00F8C23F /* Project object */;
@@ -44,6 +85,20 @@
 			remoteInfo = SampleDeveloperApp;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E13079E92055CD8D0074CD5B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E13079E32055CD8D0074CD5B /* CKTrendsAPI.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2E55A0879E3642A6B376588A /* Pods-SampleDeveloperApp-SampleDeveloperAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleDeveloperApp-SampleDeveloperAppTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SampleDeveloperApp-SampleDeveloperAppTests/Pods-SampleDeveloperApp-SampleDeveloperAppTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -62,6 +117,25 @@
 		D24D217A15BB19D06A83C602 /* Pods-SampleDeveloperAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleDeveloperAppTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SampleDeveloperAppTests/Pods-SampleDeveloperAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E11E76731F8C816F00FEA764 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "/Users/MarissaLeCoz/Documents/xCode/SampleDeveloperApp/SampleDeveloperApp/../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<absolute>"; };
 		E11F526020549E1700DD8990 /* CKTrends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKTrends.swift; sourceTree = "<group>"; };
+		E13079CD2055CD8C0074CD5B /* CKTrendsAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CKTrendsAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E13079CF2055CD8C0074CD5B /* CKTrendsAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CKTrendsAPI.h; sourceTree = "<group>"; };
+		E13079D02055CD8C0074CD5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E13079D52055CD8D0074CD5B /* CKTrendsAPITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CKTrendsAPITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E13079DC2055CD8D0074CD5B /* CKTrendsAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKTrendsAPITests.swift; sourceTree = "<group>"; };
+		E13079DE2055CD8D0074CD5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E13079ED2055CEAA0074CD5B /* FirebaseAuth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseAuth.framework; path = Firebase/Auth/FirebaseAuth.framework; sourceTree = "<group>"; };
+		E13079EF2055CEAE0074CD5B /* GTMSessionFetcher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GTMSessionFetcher.framework; path = Firebase/Auth/GTMSessionFetcher.framework; sourceTree = "<group>"; };
+		E13079F12055CEB20074CD5B /* FirebaseDatabase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseDatabase.framework; path = Firebase/Database/FirebaseDatabase.framework; sourceTree = "<group>"; };
+		E13079F32055CEB50074CD5B /* leveldb-library.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "leveldb-library.framework"; path = "Firebase/Database/leveldb-library.framework"; sourceTree = "<group>"; };
+		E13079F52055CEC10074CD5B /* FirebaseCoreDiagnostics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseCoreDiagnostics.framework; path = Firebase/Analytics/FirebaseCoreDiagnostics.framework; sourceTree = "<group>"; };
+		E13079F62055CEC10074CD5B /* FirebaseNanoPB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseNanoPB.framework; path = Firebase/Analytics/FirebaseNanoPB.framework; sourceTree = "<group>"; };
+		E13079F72055CEC10074CD5B /* FirebaseCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseCore.framework; path = Firebase/Analytics/FirebaseCore.framework; sourceTree = "<group>"; };
+		E13079F82055CEC10074CD5B /* FirebaseAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseAnalytics.framework; path = Firebase/Analytics/FirebaseAnalytics.framework; sourceTree = "<group>"; };
+		E13079F92055CEC10074CD5B /* nanopb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = nanopb.framework; path = Firebase/Analytics/nanopb.framework; sourceTree = "<group>"; };
+		E13079FA2055CEC10074CD5B /* GoogleToolboxForMac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleToolboxForMac.framework; path = Firebase/Analytics/GoogleToolboxForMac.framework; sourceTree = "<group>"; };
+		E13079FB2055CEC10074CD5B /* FirebaseInstanceID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseInstanceID.framework; path = Firebase/Analytics/FirebaseInstanceID.framework; sourceTree = "<group>"; };
+		E1307A032055CED10074CD5B /* FirebaseStorage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseStorage.framework; path = Firebase/Storage/FirebaseStorage.framework; sourceTree = "<group>"; };
+		E1307A042055CED10074CD5B /* GTMSessionFetcher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GTMSessionFetcher.framework; path = Firebase/Storage/GTMSessionFetcher.framework; sourceTree = "<group>"; };
 		E14CB1CC1F77577C00F8C23F /* SampleDeveloperApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleDeveloperApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E14CB1CF1F77577C00F8C23F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E14CB1D11F77577C00F8C23F /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -87,12 +161,41 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		E13079C92055CD8C0074CD5B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E13079EE2055CEAA0074CD5B /* FirebaseAuth.framework in Frameworks */,
+				E13079F02055CEAE0074CD5B /* GTMSessionFetcher.framework in Frameworks */,
+				E13079F42055CEB50074CD5B /* leveldb-library.framework in Frameworks */,
+				E13079FC2055CEC10074CD5B /* FirebaseCoreDiagnostics.framework in Frameworks */,
+				E13079FD2055CEC10074CD5B /* FirebaseNanoPB.framework in Frameworks */,
+				E13079FE2055CEC10074CD5B /* FirebaseCore.framework in Frameworks */,
+				E13079FF2055CEC10074CD5B /* FirebaseAnalytics.framework in Frameworks */,
+				E1307A002055CEC10074CD5B /* nanopb.framework in Frameworks */,
+				E1307A012055CEC10074CD5B /* GoogleToolboxForMac.framework in Frameworks */,
+				E1307A022055CEC10074CD5B /* FirebaseInstanceID.framework in Frameworks */,
+				E13079F22055CEB20074CD5B /* FirebaseDatabase.framework in Frameworks */,
+				E1307A052055CED10074CD5B /* FirebaseStorage.framework in Frameworks */,
+				E1307A062055CED10074CD5B /* GTMSessionFetcher.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E13079D22055CD8D0074CD5B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E13079D62055CD8D0074CD5B /* CKTrendsAPI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E14CB1C91F77577C00F8C23F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				E14CB2021F77591700F8C23F /* CloudKit.framework in Frameworks */,
 				1DE77A4F8A73F2CC37E30F20 /* Pods_SampleDeveloperApp.framework in Frameworks */,
+				E13079E22055CD8D0074CD5B /* CKTrendsAPI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,12 +220,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E13079CE2055CD8C0074CD5B /* CKTrendsAPI */ = {
+			isa = PBXGroup;
+			children = (
+				E13079CF2055CD8C0074CD5B /* CKTrendsAPI.h */,
+				E13079D02055CD8C0074CD5B /* Info.plist */,
+			);
+			path = CKTrendsAPI;
+			sourceTree = "<group>";
+		};
+		E13079DB2055CD8D0074CD5B /* CKTrendsAPITests */ = {
+			isa = PBXGroup;
+			children = (
+				E13079DC2055CD8D0074CD5B /* CKTrendsAPITests.swift */,
+				E13079DE2055CD8D0074CD5B /* Info.plist */,
+			);
+			path = CKTrendsAPITests;
+			sourceTree = "<group>";
+		};
 		E14CB1C31F77577C00F8C23F = {
 			isa = PBXGroup;
 			children = (
 				E14CB1CE1F77577C00F8C23F /* SampleDeveloperApp */,
 				E14CB1E51F77577C00F8C23F /* SampleDeveloperAppTests */,
 				E14CB1F01F77577C00F8C23F /* SampleDeveloperAppUITests */,
+				E13079CE2055CD8C0074CD5B /* CKTrendsAPI */,
+				E13079DB2055CD8D0074CD5B /* CKTrendsAPITests */,
 				E14CB1CD1F77577C00F8C23F /* Products */,
 				E14CB2001F77591700F8C23F /* Frameworks */,
 				F560DCCE99C8F94E63706F92 /* Pods */,
@@ -135,6 +258,8 @@
 				E14CB1CC1F77577C00F8C23F /* SampleDeveloperApp.app */,
 				E14CB1E21F77577C00F8C23F /* SampleDeveloperAppTests.xctest */,
 				E14CB1ED1F77577C00F8C23F /* SampleDeveloperAppUITests.xctest */,
+				E13079CD2055CD8C0074CD5B /* CKTrendsAPI.framework */,
+				E13079D52055CD8D0074CD5B /* CKTrendsAPITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -178,6 +303,19 @@
 		E14CB2001F77591700F8C23F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E1307A032055CED10074CD5B /* FirebaseStorage.framework */,
+				E1307A042055CED10074CD5B /* GTMSessionFetcher.framework */,
+				E13079F82055CEC10074CD5B /* FirebaseAnalytics.framework */,
+				E13079F72055CEC10074CD5B /* FirebaseCore.framework */,
+				E13079F52055CEC10074CD5B /* FirebaseCoreDiagnostics.framework */,
+				E13079FB2055CEC10074CD5B /* FirebaseInstanceID.framework */,
+				E13079F62055CEC10074CD5B /* FirebaseNanoPB.framework */,
+				E13079FA2055CEC10074CD5B /* GoogleToolboxForMac.framework */,
+				E13079F92055CEC10074CD5B /* nanopb.framework */,
+				E13079F32055CEB50074CD5B /* leveldb-library.framework */,
+				E13079F12055CEB20074CD5B /* FirebaseDatabase.framework */,
+				E13079EF2055CEAE0074CD5B /* GTMSessionFetcher.framework */,
+				E13079ED2055CEAA0074CD5B /* FirebaseAuth.framework */,
 				E1B9C3F32014259B00B596AF /* PromiseKit.framework */,
 				E1B9C3F12014259200B596AF /* PromiseKit.framework */,
 				E1B9C3EF2014258700B596AF /* PromiseKit.framework */,
@@ -211,7 +349,55 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		E13079CA2055CD8C0074CD5B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E13079DF2055CD8D0074CD5B /* CKTrendsAPI.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		E13079CC2055CD8C0074CD5B /* CKTrendsAPI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E13079E82055CD8D0074CD5B /* Build configuration list for PBXNativeTarget "CKTrendsAPI" */;
+			buildPhases = (
+				E13079C82055CD8C0074CD5B /* Sources */,
+				E13079C92055CD8C0074CD5B /* Frameworks */,
+				E13079CA2055CD8C0074CD5B /* Headers */,
+				E13079CB2055CD8C0074CD5B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CKTrendsAPI;
+			productName = CKTrendsAPI;
+			productReference = E13079CD2055CD8C0074CD5B /* CKTrendsAPI.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		E13079D42055CD8D0074CD5B /* CKTrendsAPITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E13079EA2055CD8D0074CD5B /* Build configuration list for PBXNativeTarget "CKTrendsAPITests" */;
+			buildPhases = (
+				E13079D12055CD8D0074CD5B /* Sources */,
+				E13079D22055CD8D0074CD5B /* Frameworks */,
+				E13079D32055CD8D0074CD5B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E13079D82055CD8D0074CD5B /* PBXTargetDependency */,
+				E13079DA2055CD8D0074CD5B /* PBXTargetDependency */,
+			);
+			name = CKTrendsAPITests;
+			productName = CKTrendsAPITests;
+			productReference = E13079D52055CD8D0074CD5B /* CKTrendsAPITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		E14CB1CB1F77577C00F8C23F /* SampleDeveloperApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E14CB1F61F77577C00F8C23F /* Build configuration list for PBXNativeTarget "SampleDeveloperApp" */;
@@ -222,10 +408,12 @@
 				E14CB1CA1F77577C00F8C23F /* Resources */,
 				3AFD73CB96EAA388A1BBF312 /* [CP] Embed Pods Frameworks */,
 				A1C043C3AF2C1A136257BDBC /* [CP] Copy Pods Resources */,
+				E13079E92055CD8D0074CD5B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E13079E12055CD8D0074CD5B /* PBXTargetDependency */,
 			);
 			name = SampleDeveloperApp;
 			productName = SampleDeveloperApp;
@@ -280,10 +468,21 @@
 		E14CB1C41F77577C00F8C23F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0830;
+				LastSwiftUpdateCheck = 0910;
 				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = "Marissa Le Coz";
 				TargetAttributes = {
+					E13079CC2055CD8C0074CD5B = {
+						CreatedOnToolsVersion = 9.1;
+						DevelopmentTeam = 5422L7PASY;
+						ProvisioningStyle = Automatic;
+					};
+					E13079D42055CD8D0074CD5B = {
+						CreatedOnToolsVersion = 9.1;
+						DevelopmentTeam = 5422L7PASY;
+						ProvisioningStyle = Automatic;
+						TestTargetID = E14CB1CB1F77577C00F8C23F;
+					};
 					E14CB1CB1F77577C00F8C23F = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = 5422L7PASY;
@@ -333,11 +532,27 @@
 				E14CB1CB1F77577C00F8C23F /* SampleDeveloperApp */,
 				E14CB1E11F77577C00F8C23F /* SampleDeveloperAppTests */,
 				E14CB1EC1F77577C00F8C23F /* SampleDeveloperAppUITests */,
+				E13079CC2055CD8C0074CD5B /* CKTrendsAPI */,
+				E13079D42055CD8D0074CD5B /* CKTrendsAPITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		E13079CB2055CD8C0074CD5B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E13079D32055CD8D0074CD5B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E14CB1CA1F77577C00F8C23F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -506,6 +721,23 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		E13079C82055CD8C0074CD5B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E13079EC2055CDAD0074CD5B /* CKTrendsUtilities.swift in Sources */,
+				E13079EB2055CDA80074CD5B /* CKTrends.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E13079D12055CD8D0074CD5B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E13079DD2055CD8D0074CD5B /* CKTrendsAPITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E14CB1C81F77577C00F8C23F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -537,6 +769,21 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		E13079D82055CD8D0074CD5B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E13079CC2055CD8C0074CD5B /* CKTrendsAPI */;
+			targetProxy = E13079D72055CD8D0074CD5B /* PBXContainerItemProxy */;
+		};
+		E13079DA2055CD8D0074CD5B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E14CB1CB1F77577C00F8C23F /* SampleDeveloperApp */;
+			targetProxy = E13079D92055CD8D0074CD5B /* PBXContainerItemProxy */;
+		};
+		E13079E12055CD8D0074CD5B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E13079CC2055CD8C0074CD5B /* CKTrendsAPI */;
+			targetProxy = E13079E02055CD8D0074CD5B /* PBXContainerItemProxy */;
+		};
 		E14CB1E41F77577C00F8C23F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E14CB1CB1F77577C00F8C23F /* SampleDeveloperApp */;
@@ -569,6 +816,118 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		E13079E42055CD8D0074CD5B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5422L7PASY;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Firebase/Auth",
+					"$(PROJECT_DIR)/Firebase/Database",
+					"$(PROJECT_DIR)/Firebase/Analytics",
+					"$(PROJECT_DIR)/Firebase/Storage",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = CKTrendsAPI/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.MarissaLeCoz.CKTrendsAPI;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		E13079E52055CD8D0074CD5B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5422L7PASY;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Firebase/Auth",
+					"$(PROJECT_DIR)/Firebase/Database",
+					"$(PROJECT_DIR)/Firebase/Analytics",
+					"$(PROJECT_DIR)/Firebase/Storage",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = CKTrendsAPI/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.MarissaLeCoz.CKTrendsAPI;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		E13079E62055CD8D0074CD5B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5422L7PASY;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = CKTrendsAPITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.MarissaLeCoz.CKTrendsAPITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SampleDeveloperApp.app/SampleDeveloperApp";
+			};
+			name = Debug;
+		};
+		E13079E72055CD8D0074CD5B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5422L7PASY;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = CKTrendsAPITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.MarissaLeCoz.CKTrendsAPITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SampleDeveloperApp.app/SampleDeveloperApp";
+			};
+			name = Release;
+		};
 		E14CB1F41F77577C00F8C23F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -678,8 +1037,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 85507C50E5117CBE67B14FB8 /* Pods-SampleDeveloperApp.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SampleDeveloperApp/SampleDeveloperApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 5422L7PASY;
 				INFOPLIST_FILE = SampleDeveloperApp/Info.plist;
@@ -697,8 +1058,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EBE9F5893BB2C2FBF78C8AF6 /* Pods-SampleDeveloperApp.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SampleDeveloperApp/SampleDeveloperApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 5422L7PASY;
 				INFOPLIST_FILE = SampleDeveloperApp/Info.plist;
@@ -781,6 +1144,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		E13079E82055CD8D0074CD5B /* Build configuration list for PBXNativeTarget "CKTrendsAPI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E13079E42055CD8D0074CD5B /* Debug */,
+				E13079E52055CD8D0074CD5B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E13079EA2055CD8D0074CD5B /* Build configuration list for PBXNativeTarget "CKTrendsAPITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E13079E62055CD8D0074CD5B /* Debug */,
+				E13079E72055CD8D0074CD5B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E14CB1C71F77577C00F8C23F /* Build configuration list for PBXProject "SampleDeveloperApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

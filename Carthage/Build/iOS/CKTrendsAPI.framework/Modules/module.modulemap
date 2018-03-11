@@ -1,0 +1,11 @@
+framework module CKTrendsAPI {
+  umbrella header "CKTrendsAPI.h"
+
+  export *
+  module * { export * }
+}
+
+module CKTrendsAPI.Swift {
+    header "CKTrendsAPI-Swift.h"
+    requires objc
+}

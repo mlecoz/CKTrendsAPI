@@ -8,7 +8,9 @@
 
 import Foundation
 import CloudKit
-import Firebase
+import FirebaseAuth
+import FirebaseDatabase
+import FirebaseCore
 
 class CKTrends {
     
