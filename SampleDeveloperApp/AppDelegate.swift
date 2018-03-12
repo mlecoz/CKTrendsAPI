@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        self.ckTrends = CKTrends(containerName: "iCloud.com.MarissaLeCozz.SampleDeveloperApp", window: window!, appID: "1", recordTypesToTrack: ["Blah1", "Users", "Blah", "RecordTypeA", "RecordTypeB"], listsToTrack: ["ListType", "list"])
+        self.ckTrends = CKTrends(appID: "1", recordTypesToTrack: ["Blah1", "Users", "Blah", "RecordTypeA", "RecordTypeB"], listsToTrack: ["ListType", "list"])
         return true
     }
 

@@ -14,21 +14,18 @@ import FirebaseCore
 
 class CKTrends {
     
-    private var container: CKContainer
     private let firebaseDBRef: DatabaseReference
     private var recordTypeToRecordListDict = [String:[CKRecord]]()
-    private var vc: UIViewController
+    private var vc: UIViewController?
     private var appID: String
     private var recordTypesToTrack: [String]
     private var listsToTrack: [String]
-
-//    let appID = "1"
-//    let recordTypesToTrack = ["Blah1", "Users", "Blah", "RecordTypeA", "RecordTypeB"] // add B later
-//    let listsToTrack = ["ListType", "list"]
+    
+    //    let appID = "1"
+    //    let recordTypesToTrack = ["Blah1", "Users", "Blah", "RecordTypeA", "RecordTypeB"] // add B later
+    //    let listsToTrack = ["ListType", "list"]
     // nil if none in either of these lists
-    init(containerName: String, window: UIWindow, appID: String, recordTypesToTrack: [String]?, listsToTrack: [String]?) { // "iCloud.com.MarissaLeCozz.SampleDeveloperApp"
-        self.container = CKContainer(identifier: containerName)
-        self.vc = window.rootViewController!
+    init(appID: String, recordTypesToTrack: [String]?, listsToTrack: [String]?) {
         FirebaseApp.configure()
         self.firebaseDBRef = Database.database().reference()
         self.appID = appID
@@ -49,7 +46,7 @@ class CKTrends {
     // to be called in AppDelegate in application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool
     // return appWasOpened(...) [will return bool]
     func appWasOpened(options: [UIApplicationOpenURLOptionsKey : Any]) {
-
+        
         // which app opened you
         guard let sendingAppID = options[.sourceApplication] as? String else {
             return
@@ -68,10 +65,11 @@ class CKTrends {
                 logIn()
             }
             else {
-                CKTrendsUtilities.presentErrorAlert(message: "CKTrends has detected that your app is using its CloudKit development environment. CKTrends only works when your app is using its CloudKit production environment.", vc: self.vc)
+                guard let vc = self.vc else { return }
+                CKTrendsUtilities.presentErrorAlert(message: "CKTrends has detected that your app is using its CloudKit development environment. CKTrends only works when your app is using its CloudKit production environment.", vc: vc)
             }
         }
-
+        
     }
     
     private func configureLoginAlert() -> UIAlertController {
@@ -94,7 +92,8 @@ class CKTrends {
             
             Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
                 if (error != nil) {
-                    CKTrendsUtilities.presentErrorAlert(message: "Sign in failed. Please check your email and password. Tap the Refresh button in CKTrends to try again.", vc: self.vc)
+                    guard let vc = self.vc else { return }
+                    CKTrendsUtilities.presentErrorAlert(message: "Sign in failed. Please check your email and password. Tap the Refresh button in CKTrends to try again.", vc: vc)
                 }
                 else {
                     guard let uid = user?.uid else {
@@ -110,7 +109,22 @@ class CKTrends {
     private func logIn() {
         
         let popUp = self.configureLoginAlert()
-        self.vc.present(popUp, animated: true, completion: nil)
+        
+        // NovNet hack (because the root vc of window was interpreted to be the Purple View Controller, which was quickly usurped by the
+        // World View Controller. hence, the login prompt was hidden.)
+        DispatchQueue.global(qos: .background).async {
+            sleep(2) // wait for the World View Controller to come into view (after PurpleVC makes its appearance)
+            DispatchQueue.main.async {
+                if var topController = UIApplication.shared.keyWindow?.rootViewController {
+                    while let presentedViewController = topController.presentedViewController {
+                        topController = presentedViewController
+                    }
+                    self.vc = topController
+                    topController.present(popUp, animated: true, completion: nil)
+                }
+                
+            }
+        }
     }
     
     private func updateCKTrends(uid: String) {
@@ -172,9 +186,9 @@ class CKTrends {
                                 CKContainer.default().publicCloudDatabase.add(operation1)
                             }
                                 
-                            // if this isn't a new record type, query all record since the last time this type was tracked
-                            // edge case: include that day itself. (Suppose that the user checked midday, and now they check again later in the
-                            // day. To avoid overriding the count from earlier in the day, we need query for all records created on that day.)
+                                // if this isn't a new record type, query all record since the last time this type was tracked
+                                // edge case: include that day itself. (Suppose that the user checked midday, and now they check again later in the
+                                // day. To avoid overriding the count from earlier in the day, we need query for all records created on that day.)
                             else {
                                 
                                 guard let lastCheckAsStr = recordTypeToLastCheckDict!?[recordType] as? String else {
@@ -208,7 +222,8 @@ class CKTrends {
                             }
                         }
                         else {
-                            CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: self.vc)
+                            guard let vc = self.vc else { return }
+                            CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                         }
                     }
                 }
@@ -218,7 +233,7 @@ class CKTrends {
                     
                     let predicate = NSPredicate(value: true)
                     let query = CKQuery(recordType: self.listsToTrack[i], predicate: predicate) // ith element is the record that has the list to track
-                    self.container.publicCloudDatabase.perform(query, inZoneWith: nil) { records, error in // only care about 0th, so no need to use a cursor
+                    CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil) { records, error in // only care about 0th, so no need to use a cursor
                         if error == nil {
                             guard let records = records, records.count > 0 else {
                                 return
@@ -232,7 +247,8 @@ class CKTrends {
                 }
             }
             else {
-                CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: self.vc)
+                guard let vc = self.vc else { return }
+                CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
             }
         })
     }
@@ -247,7 +263,8 @@ class CKTrends {
             let dateStr = CKTrendsUtilities.stringFromDate(date: date)
             Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("EARLIEST_DATE").updateChildValues([recordType: dateStr], withCompletionBlock: { (error, ref) in
                 if error != nil {
-                    CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: self.vc)
+                    guard let vc = self.vc else { return }
+                    CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                 }
             })
         }
@@ -256,7 +273,8 @@ class CKTrends {
         if dateToCountDict.count == 0 {
             Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: CKTrendsUtilities.formattedDateForToday()], withCompletionBlock: { (error, ref) in
                 if error != nil {
-                    CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: self.vc)
+                    guard let vc = self.vc else { return }
+                    CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                 }
             })
         }
@@ -289,7 +307,8 @@ class CKTrends {
                             // record LAST_CHECK
                             Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("LAST_CHECK").updateChildValues([recordType: CKTrendsUtilities.formattedDateForToday()], withCompletionBlock : { (error2, ref) in
                                 if error2 != nil {
-                                    CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: self.vc)
+                                    guard let vc = self.vc else { return }
+                                    CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                                 }
                                 else {
                                     if self.recordTypeToRecordListDict[recordType] != nil {
@@ -299,7 +318,8 @@ class CKTrends {
                             })
                         }
                         else {
-                            CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: self.vc)
+                            guard let vc = self.vc else { return }
+                            CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                         }
                     })
                 }
@@ -307,13 +327,15 @@ class CKTrends {
                 // Save the max count
                 Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("MAX_COUNT").updateChildValues([recordType: String(maxCount)], withCompletionBlock: { (error, ref) in
                     if error != nil {
-                        CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: self.vc)
+                        guard let vc = self.vc else { return }
+                        CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                     }
                 })
                 
             }
             else {
-                CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: self.vc)
+                guard let vc = self.vc else { return }
+                CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
             }
         }
     }
@@ -329,7 +351,8 @@ class CKTrends {
             // shouldn't be tracking this
             Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
                 if error != nil {
-                    CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: self.vc)
+                    guard let vc = self.vc else { return }
+                    CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                 }
             })
             count = 0 // to appease the system
@@ -367,22 +390,26 @@ class CKTrends {
                                 // save the delta from the last time
                                 Database.database().reference().child("users").child("\(uid)").child("\(appID)").child("DELTAS").updateChildValues(["\(recordType)~\(listName)": count! - oldCount], withCompletionBlock : { (error3, ref) in
                                     if error3 != nil {
-                                        CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: self.vc)
+                                        guard let vc = self.vc else { return }
+                                        CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                                     }
                                 })
                             }
                             else {
-                                CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: self.vc)
+                                guard let vc = self.vc else { return }
+                                CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                             }
                         })
                     }
                     else {
-                        CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: self.vc)
+                        guard let vc = self.vc else { return }
+                        CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
                     }
                 })
             }
             else {
-                CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: self.vc)
+                guard let vc = self.vc else { return }
+                CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
             }
         }
     }
@@ -390,7 +417,11 @@ class CKTrends {
     // adapted from: https://gist.github.com/evermeer/5df7ad1f8db529893f40
     private func queryRecordsWithCursor(cursor: CKQueryCursor?, isFirstCheck: Bool, uid: String, appID: String, recordType: String) {
         
-        guard let theCursor = cursor else { return }
+        guard let theCursor = cursor else {
+            self.saveRecordCounts(records: self.recordTypeToRecordListDict[recordType]!, uid: uid, appID: appID, recordType: recordType, isFirstCheck: isFirstCheck) // use isFirstCheck, not the value in the dictionary
+            return
+            
+        }
         let operation = CKQueryOperation(cursor: theCursor)
         
         // happens each time a record is received
@@ -427,16 +458,21 @@ class CKTrends {
             // shoudn't be tracking this
             Database.database().reference().child(pathString).removeValue(completionBlock: { (error, ref) in
                 if error != nil {
-                    CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. One of the record types you desire to track does not exist, or you are trying to track a system record type, like User.", vc: self.vc)
+                    guard let vc = self.vc else { return }
+                    CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. One of the record types you desire to track does not exist, or you are trying to track a system record type, like User.", vc: vc)
                 }
             })
         }
         else if error.errorCode == 12 {
-            CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Make sure that the Record Types you wish to track have a queryable recordName and a queryable & sortable createdAt. (See API documentation for help.)", vc: self.vc)
+            guard let vc = self.vc else { return }
+            CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Make sure that the Record Types you wish to track have a queryable recordName and a queryable & sortable createdAt. (See API documentation for help.)", vc: vc)
         }
         else {
-            CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: self.vc)
+            guard let vc = self.vc else { return }
+            CKTrendsUtilities.presentErrorAlert(message: "CKTrends refresh failed. Go back to the CKTrends app and tap Refresh to try again.", vc: vc)
         }
     }
     
 }
+
+
