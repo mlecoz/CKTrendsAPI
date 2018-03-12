@@ -39,11 +39,13 @@ Open the CKTrends app, go to the My Apps tab, and tap APPLY. Fill out the form a
 ## Add Firebase to your project (TODO - manually instead of Cocoapods (just make sure that Firebase import in the API works); or maybe this won't be necessary becuase CKTrends already uses this API)
 To your Cocoapods file, add the following under `# Pods for YourAppName`:
 
+```
 "Firebase/Core", "~>4.8.0"
 
 "Firebase/Database", "~>4.8.0"
 
 "Firebase/Auth", "~>4.8.0"
+```
 
 ![Alt text](Images/addingFirebaseViaCocoapods.png)
 
