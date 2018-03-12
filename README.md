@@ -3,7 +3,7 @@
 This repo is a playground of sorts containing the API code necessary for tracking the CloudKit database of "SampleDevApp."
 The code of this repo was eventually turned into a Carthage library (also in this repo) to be used in your app in conjunction with the app CKTrends.
 
-## Simplified version of how this works
+## Overview
 1) Download the CKTrends API from the Carthage directory in this repo.
 2) Add this framework to your own project. (Note: If you're using Cocoapods in your project, and Google Firebase is one of your
 dependencies, this won't work.)
@@ -38,8 +38,11 @@ Open the CKTrends app, go to the My Apps tab, and tap APPLY. Fill out the form a
 
 ## Add Firebase to your project (TODO - manually instead of Cocoapods (just make sure that Firebase import in the API works); or maybe this won't be necessary becuase CKTrends already uses this API)
 To your Cocoapods file, add the following under `# Pods for YourAppName`:
+
 "Firebase/Core", "~>4.8.0"
+
 "Firebase/Database", "~>4.8.0"
+
 "Firebase/Auth", "~>4.8.0"
 
 ![Alt text](Images/addingFirebaseViaCocoapods.png)
@@ -68,13 +71,17 @@ Open the CKTrends app, go to the My Apps tab, and tap REGISTER. Fill out the for
 ## Adjust CloudKit indices, if applicable
 
 For every record type you want to track, make sure that
-    - recordName is queryable
+
+   - recordName is queryable
+   
     - createdAt is sortable
+    
     - createdAt is queryable
     
 For every list type you want to track, make sure that
-    - recordName is queryable
-    
+
+- recordName is queryable
+
 These adjustments can be made in the CloudKit dashboard.
 
 ## Add the API call to your code
@@ -85,12 +92,19 @@ These adjustments can be made in the CloudKit dashboard.
 self.ckTrends = CKTrends(containerName: "CloudKitContainerYouWantToTrack", window: window!, appID: "AppIDThatWasEmailedToYou", recordTypesToTrack: RecordTypesToTrack, listsToTrack: ListsToTrack)
 ```
 `containerName` will look something like `"iCloud.com.MarissaLeCoz.SampleDeveloperApp"`
+
+
 `recordTypesToTrack` will look something like `["RecordTypeA", "RecordTypeB", ...]`
+
 If you do not want to track any record types, this parameter should be `nil`.
 
+
 `listsToTrack` will track the number of elements in a list property of some RecordType, assuming that only one instance of this RecordType exists. `listsToTrack` should be in the form:
+
 `["RecordType1", "listProperty1", "RecordType2", "listProperty2", ...]`
+
 If you do not want to track any record types, this parameter should be `nil`.
+
 
 4. Add the following code to your AppDelegate. This code invokes the API when your app is opened by CKTrends.
 ```
