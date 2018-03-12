@@ -51,14 +51,64 @@ If your project is not already using Cocoapods, a dependency manager for iOS, yo
 REMEMBER TO USE XCWORKSPACE AFTER RUNNING POD INSTALL FROM THE COMMAND LINE. (This is a peculiarity of Cocoapods. The first time you `pod install` your dependencies for a project,
 Cocoapods generates an .xcworkspace file that you should use for development instead of the .xcproject.)
 
-## Register a URL for your app
+## Register a URL for your app (if you haven't already done this)
+Ever wondered how apps are able to open other apps on your device? They use the local URL for that app! But this only works if that app has registered a local URL. CKTrends will open your app to run the API code in it when you tap "Refresh" in CKTrends. Your local URL will look something like this: `yourAppName://com.yourCompanyName.yourAppName`.
 
+Open your project's Info.plist file, and add a `URL types` entry, making it look like the below screenshot. "yourCompanyName" is the name of your company or your own name. "yourAppName" is the name of
+your app.
+
+![Alt text](Images/urlScheme.png)
 
 ## REGISTER your app in CKTrends
 Open the CKTrends app, go to the My Apps tab, and tap REGISTER. Fill out the form.
 - App Name: The name you want to identify your app in CKTrends.
 - Unique App ID: The ID in the email you received from cktrends1@gmail.com
-- App URL:
+- App URL: The URL you created in the previous step, which should be of the form `yourAppName://com.yourCompanyName.yourAppName`.
+
+## Adjust CloudKit indices, if applicable
+
+For every record type you want to track, make sure that
+    - recordName is queryable
+    - createdAt is sortable
+    - createdAt is queryable
+    
+For every list type you want to track, make sure that
+    - recordName is queryable
+    
+These adjustments can be made in the CloudKit dashboard.
+
+## Add the API call to your code
+1. In your AppDelegate, import the CKTrends API: `import CKTrendsAPI`
+2. Add this instance variable declaration to your AppDelegate: `var ckTrends: CKTrends?`
+3. Initialize `ckTrends` in the `didFinishLaunchingWithOptions` method in your AppDelegate.
+```
+self.ckTrends = CKTrends(containerName: "CloudKitContainerYouWantToTrack", window: window!, appID: "AppIDThatWasEmailedToYou", recordTypesToTrack: RecordTypesToTrack, listsToTrack: ListsToTrack)
+```
+`containerName` will look something like `"iCloud.com.MarissaLeCoz.SampleDeveloperApp"`
+`recordTypesToTrack` will look something like `["RecordTypeA", "RecordTypeB", ...]`
+If you do not want to track any record types, this parameter should be `nil`.
+
+`listsToTrack` will track the number of elements in a list property of some RecordType, assuming that only one instance of this RecordType exists. `listsToTrack` should be in the form:
+`["RecordType1", "listProperty1", "RecordType2", "listProperty2", ...]`
+If you do not want to track any record types, this parameter should be `nil`.
+
+4. Add the following code to your AppDelegate. This code invokes the API when your app is opened by CKTrends.
+```
+func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    ckTrends?.appWasOpened(options: options)
+    return true
+}
+```
+
+## Notes
+- This API only tracks your Production CloudKit database. It will not track your Development CloudKit database.
+- The User record type unfortunately can't be tracked because Apple does not let you query their built-in types.
+- If you track a list length, the API assumes that only one instance of the record type that has that list has been created.
+
+
+
+
+
 
 
 

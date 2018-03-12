@@ -8,9 +8,10 @@
 
 import UIKit
 import CloudKit
-import Firebase
-import FirebaseDatabase
-import FirebaseAuth
+//import Firebase
+//import FirebaseDatabase
+//import FirebaseAuth
+import CKTrendsAPI
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
