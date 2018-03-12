@@ -25,11 +25,11 @@ Email cktrends1@gmail.com to get the ad hoc version.
 Open the CKTrends app, go to the My Apps tab, and tap APPLY. Fill out the form and tap Apply and send the email form that pops up. To find your "Bundle Identifier," go to the General tab in your Xcode project.
 
 ## **ADMIN ONLY** Manually process the email
-1. Go to the Google Firebase dashboard, click Analytics App, and select "Add Another App." Go through the process.
+1. Go to the Google Firebase console, click Analytics App, and select "Add Another App." Go through the process.
 2. Send the developer:
 - The GoogleService-Info.plist file (or tell them how to alter the given plist file in this repo). (TODO)
 - Send a UUID for appID (https://www.uuidgenerator.net/ - version 4 UUID)
-- Add UUID as a ValidID in the production CloudKit database for CKTrends.
+- Add UUID as a ValidID in the development CloudKit database for CKTrends.
 
 ## Look for an email from cktrends1@gmail.com
 - This email will contain a GoogleService-Info.plist file that you should add to the root of your Xcode project. Add this to all targets too.
@@ -40,11 +40,9 @@ Open the CKTrends app, go to the My Apps tab, and tap APPLY. Fill out the form a
 To your Cocoapods file, add the following under `# Pods for YourAppName`:
 
 ```
-"Firebase/Core", "~>4.8.0"
-
-"Firebase/Database", "~>4.8.0"
-
-"Firebase/Auth", "~>4.8.0"
+pod "Firebase/Core", "~>4.8.0"
+pod "Firebase/Database", "~>4.8.0"
+pod "Firebase/Auth", "~>4.8.0"
 ```
 
 ![Alt text](Images/addingFirebaseViaCocoapods.png)
@@ -115,6 +113,10 @@ func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpe
     return true
 }
 ```
+
+## Refresh from CKTrends!
+Open CKTrends. Ensure that the proper app is selected (tap Change App if you have multiple apps to choose from). Tap Refresh in the upper left hand corner. This will open your app and run the API code.
+On your first refresh, this may take some time. Re-open CKTrends after waiting, and your trends should display!
 
 ## Notes
 - This API only tracks your Production CloudKit database. It will not track your Development CloudKit database.
