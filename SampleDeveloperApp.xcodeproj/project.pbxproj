@@ -136,6 +136,7 @@
 		E13079FB2055CEC10074CD5B /* FirebaseInstanceID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseInstanceID.framework; path = Firebase/Analytics/FirebaseInstanceID.framework; sourceTree = "<group>"; };
 		E1307A032055CED10074CD5B /* FirebaseStorage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseStorage.framework; path = Firebase/Storage/FirebaseStorage.framework; sourceTree = "<group>"; };
 		E1307A042055CED10074CD5B /* GTMSessionFetcher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GTMSessionFetcher.framework; path = Firebase/Storage/GTMSessionFetcher.framework; sourceTree = "<group>"; };
+		E1307A0B205625680074CD5B /* CKTrendsAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CKTrendsAPI.framework; sourceTree = "<group>"; };
 		E14CB1CC1F77577C00F8C23F /* SampleDeveloperApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleDeveloperApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E14CB1CF1F77577C00F8C23F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E14CB1D11F77577C00F8C23F /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -303,6 +304,7 @@
 		E14CB2001F77591700F8C23F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E1307A0B205625680074CD5B /* CKTrendsAPI.framework */,
 				E1307A032055CED10074CD5B /* FirebaseStorage.framework */,
 				E1307A042055CED10074CD5B /* GTMSessionFetcher.framework */,
 				E13079F82055CEC10074CD5B /* FirebaseAnalytics.framework */,
@@ -1043,6 +1045,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 5422L7PASY;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = SampleDeveloperApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1064,6 +1070,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 5422L7PASY;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = SampleDeveloperApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
