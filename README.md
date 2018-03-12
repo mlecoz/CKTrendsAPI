@@ -2,7 +2,7 @@
 
 This repo is a playground of sorts containing the API code necessary for tracking the CloudKit database of "SampleDevApp."
 The code of this repo was eventually turned into a Carthage library (also in this repo, at SampleDevApp/Carthage/Build/iOS/CKTrendsAPI.framework) to be used in your app in conjunction with the app CKTrends.
-Alternatively, if dependencies are too much to deal with, you can download SampleDevApp/CKTrends.swift and SampleDevApp/CKTrendsUtilities.swift and add them to your project.
+Alternatively, if dependencies are too much to deal with, you can download SampleDevApp/CKTrends.swift and SampleDevApp/CKTrendsUtilities.swift and add them to your project manually.
 
 ## Overview
 1) Add the CKTrends API to your own project. (Note: If you're using Cocoapods in your project && you want to use the Carthage framework in this repo && Google Firebase is one of your
@@ -25,7 +25,7 @@ Open the CKTrends app, go to the My Apps tab, and tap APPLY. Fill out the form a
 ## **ADMIN ONLY** Manually process the email
 1. Go to the Google Firebase console, click Analytics App, and select "Add Another App." Go through the process.
 2. Send the developer:
-- The GoogleService-Info.plist file (or tell them how to alter the given plist file in this repo). (TODO)
+- The GoogleService-Info.plist file.
 - Send a UUID for appID (https://www.uuidgenerator.net/ - version 4 UUID)
 - Add UUID as a ValidID in the development CloudKit database for CKTrends.
 
@@ -34,7 +34,7 @@ Open the CKTrends app, go to the My Apps tab, and tap APPLY. Fill out the form a
 ![Alt text](Images/plist.png)
 - This email will also contain an ID for your app. Make note of this ID, as you'll need it in your API calls.
 
-## Add Firebase to your project (TODO - manually instead of Cocoapods (just make sure that Firebase import in the API works); or maybe this won't be necessary becuase CKTrends already uses this API)
+## Add Firebase to your project
 To your Cocoapods file, add the following under `# Pods for YourAppName`:
 
 ```
@@ -51,6 +51,12 @@ If your project is not already using Cocoapods, a dependency manager for iOS, yo
 
 REMEMBER TO USE XCWORKSPACE AFTER RUNNING POD INSTALL FROM THE COMMAND LINE. (This is a peculiarity of Cocoapods. The first time you `pod install` your dependencies for a project,
 Cocoapods generates an .xcworkspace file that you should use for development instead of the .xcproject.)
+
+## Add CKTrends to your project
+If you are up to the challenge of working with dependencies, the CKTrendsAPI.framework is available in this repo at SampleDevApp/Carthage/Build/iOS/CKTrendsAPI.framework. Note that, in order to use the
+CKTrendsAPI framework, you will need to bring in the Firebase frameworks for Core, Database, and Auth. You can download these frameworks at the bottom of https://firebase.google.com/docs/ios/setup.
+
+If dependencies are giving you grief, create a directory called CKTrends at the root of your project, and add SampleDevApp/CKTrends.swift and SampleDevApp/CKTrendsUtilities.swift.
 
 ## Register a URL for your app (if you haven't already done this)
 Ever wondered how apps are able to open other apps on your device? They use the local URL for that app! But this only works if that app has registered a local URL. CKTrends will open your app to run the API code in it when you tap "Refresh" in CKTrends. Your local URL will look something like this: `yourAppName://com.yourCompanyName.yourAppName`.
@@ -83,14 +89,12 @@ For every list type you want to track, make sure that
 These adjustments can be made in the CloudKit dashboard.
 
 ## Add the API call to your code
-1. In your AppDelegate, import the CKTrends API: `import CKTrendsAPI`
+1. If you are using a dependency manager instead of adding CKTrends.swift and CKTrendsUtilities.swift directly to your project: In your AppDelegate, import the CKTrends API: `import CKTrendsAPI`
 2. Add this instance variable declaration to your AppDelegate: `var ckTrends: CKTrends?`
 3. Initialize `ckTrends` in the `didFinishLaunchingWithOptions` method in your AppDelegate.
 ```
-self.ckTrends = CKTrends(containerName: "CloudKitContainerYouWantToTrack", window: window!, appID: "AppIDThatWasEmailedToYou", recordTypesToTrack: RecordTypesToTrack, listsToTrack: ListsToTrack)
+self.ckTrends = CKTrends(appID: "AppIDThatWasEmailedToYou", recordTypesToTrack: RecordTypesToTrack, listsToTrack: ListsToTrack)
 ```
-`containerName` will look something like `"iCloud.com.MarissaLeCoz.SampleDeveloperApp"`
-
 
 `recordTypesToTrack` will look something like `["RecordTypeA", "RecordTypeB", ...]`
 
