@@ -1,7 +1,7 @@
 # SampleDevApp & CKTrends API
 
 This repo is a playground of sorts containing the API code necessary for tracking the CloudKit database of "SampleDevApp."
-The code of this repo was eventually turned into a Carthage library (also in this repo) to be used in your app in conjunction with the app CKTrends.
+The code of this repo was eventually turned into a Carthage library (also in this repo, at SampleDevApp/Carthage/Build/iOS/CKTrendsAPI.framework) to be used in your app in conjunction with the app CKTrends.
 
 ## Overview
 1) Download the CKTrends API from the Carthage directory in this repo.
